@@ -12,30 +12,59 @@
         />
 
         <q-toolbar-title>
-          Quasar App
+          EMPRESAM CONSTRUCTORA RTS
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <div>rts</div>
       </q-toolbar>
     </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
+ <q-drawer v-model="leftDrawerOpen" show-if-above bordered  class="bg-grey-1">
+      <q-list bordered padding class="rounded-borders text-primary">
+        <q-item-label header
+        class="text-grey-8">   Opciones del menu </q-item-label>
+    
+              <q-item clickable active-class="my-menu-link" to="/" exact>
+                    <q-item-section avatar>
+                      <q-icon color="teal" name="home" />
+                    </q-item-section>
+                    <q-item-section>Principal</q-item-section>
+              </q-item>
+        
+          <q-item 
+               clickable v-ripple to="/Login" exact>
+          <q-item-section avatar>
+            <q-icon color="teal" name="login" />
+          </q-item-section>
+          <q-item-section>Ingreso</q-item-section>
+        </q-item>
 
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
+
+          <q-item  
+           clickable   active-class="my-menu-link" to="/Usuarios" exact>
+          <q-item-section avatar>
+            <q-icon color="teal" name="today" />
+          </q-item-section>
+          <q-item-section>Usuarios</q-item-section>
+        </q-item>
+
+         <q-item    
+         clickable   active-class="my-menu-link" to="/" exact>
+          <q-item-section avatar>
+            <q-icon color="teal" name="summarize" />
+          </q-item-section>
+          <q-item-section>Reportes</q-item-section>
+        </q-item>
+
+
+        <q-item 
+         clickable  @click="logout">
+          <q-item-section avatar>
+            <q-icon color="teal" name="logout" />
+          </q-item-section>
+          <q-item-section>Salir</q-item-section>
+        </q-item>
+
       </q-list>
     </q-drawer>
 
@@ -47,70 +76,41 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
-
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-]
-
-export default defineComponent({
+ export default defineComponent({
   name: 'MainLayout',
 
   components: {
-    EssentialLink
+   // EssentialLink
   },
 
   setup () {
     const leftDrawerOpen = ref(false)
 
     return {
-      essentialLinks: linksList,
+    //  essentialLinks: linksList,
       leftDrawerOpen,
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
       }
     }
+  },
+   methods:{
+    logout(){
+      this.$q.loading.show()
+      this.$store.dispatch('login/logout')
+        .then(() => {
+          this.$q.loading.hide()
+          this.$router.push('/login')
+        })
+    }
+  },
+  mounted() {
+    // console.log(this.$store.state.login.user.name)
   }
 })
 </script>
+<style lang="sass">
+.my-menu-link
+  color: blue
+  background: #F2C037
+</style>
