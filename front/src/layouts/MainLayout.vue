@@ -18,7 +18,7 @@
 
        
         <div>
-          <q-chip  color="red" v-if="store.eventNumber!=0" text-color="white" icon="warning_amber" :label="store.eventNumber+' Facturas no enviadas'" />
+          <q-chip  color="red" v-if="store.eventNumber!=0" text-color="white" icon="warning_amber" :label="store.eventNumber+' Pendientes para envio'" />
           <b>Usuario:</b>{{store.user.name}}
           <q-btn
             flat
@@ -32,25 +32,73 @@
     </q-header>
 
  <q-drawer v-model="leftDrawerOpen" show-if-above bordered  class="bg-grey-1">
+
+
       <q-list bordered padding class="rounded-borders text-primary">
+        
+         <q-item-label header class="text-center q-pa-none q-ma-none" style="background: #fffff">
+          <q-img src="RTS.png" width="150px" />
+        </q-item-label>
+
+
+
         <q-item-label header
         class="text-grey-8">   Opciones del menu </q-item-label>
     
+
+
+        <q-expansion-item dense exact expand-separator icon="o_home" label="Principal" default-opened to="/" expand-icon="null"/>
+        <q-expansion-item dense exact expand-separator icon="o_people" label="Usuarios" to="User" expand-icon="null" />
+        
+        <q-expansion-item expand-separator dense exact icon="o_engineering" label="Siat" >
+          <q-expansion-item dense exact :header-inset-level="1" expand-separator icon="o_psychology" label="Cuis" default-opened to="cuis" expand-icon="null" />
+          <q-expansion-item dense exact :header-inset-level="1" expand-separator icon="o_countertops" label="sincronizacion" default-opened to="sincronizacion" expand-icon="null" />
+          <q-expansion-item dense exact :header-inset-level="1" expand-separator icon="link" label="Cufd" default-opened to="cufd" expand-icon="null" v-if="store.boolcufd"/>
+          <q-expansion-item dense exact :header-inset-level="1" expand-separator icon="list" label="Evento significativo" default-opened to="eventoSignificativo" expand-icon="null" />
+        </q-expansion-item>
+        <q-expansion-item expand-separator dense exact icon="o_movie_filter" label="Peliculas" >
+          <q-expansion-item dense exact :header-inset-level="1" expand-separator icon="o_movie" label="Peliculas" default-opened to="peliculas" expand-icon="null" />
+          <q-expansion-item dense exact :header-inset-level="1" expand-separator icon="o_cast_for_education" label="Distribuidores" default-opened to="distribuidores" expand-icon="null" v-if="store.booldistrib"/>
+        </q-expansion-item>
+        <q-expansion-item dense exact expand-separator icon="o_living" label="Salas" to="salas" expand-icon="null" 
+        />
+        <q-expansion-item dense exact expand-separator icon="o_price_change" label="Tarifas" to="tarifas" expand-icon="null" />
+        <q-expansion-item dense exact expand-separator icon="format_list_bulleted" label="Rubro" to="rubro" expand-icon="null" />
+        <q-expansion-item dense exact expand-separator icon="receipt_long" label="Producto" to="productos" expand-icon="null" />
+        <q-expansion-item dense exact expand-separator icon="calendar_month" label="Programación" to="programa" expand-icon="null" v-if="store.boolprogram"/>
+<!--        <q-expansion-item dense exact expand-separator icon="o_local_activity" label="Venta de boletos" to="sale" expand-icon="null"/>-->
+        <q-expansion-item expand-separator dense exact icon="o_local_activity" label="Venta Boleteria" v-if="store.boolboleteria||store.boollistbol">
+          <q-expansion-item dense exact :header-inset-level="1" expand-separator icon="o_local_activity" label="Venta de boletos" default-opened to="sale" expand-icon="null" v-if="store.boolboleteria"/>
+          <q-expansion-item dense exact :header-inset-level="1" expand-separator icon="o_cast_for_education" label="Listado de ventas" default-opened to="listaVenta" expand-icon="null" v-if="store.boollistbol"/>
+        </q-expansion-item>
+        <q-expansion-item expand-separator dense exact icon="o_store" label="Candy Bar" >
+          <q-expansion-item dense exact :header-inset-level="1" expand-separator icon="o_store" label="Venta Candy Bar" default-opened to="candy" expand-icon="null" v-if="store.boolcandy"/>
+          <q-expansion-item dense exact :header-inset-level="1" expand-separator icon="o_cast_for_education" label="Listado de ventas" default-opened to="listaVentaCandy" expand-icon="null" v-if="store.boollistcandy"/>
+        </q-expansion-item>
+        <q-expansion-item expand-separator dense exact icon="o_store" label="Reporte Caja" >
+          <q-expansion-item dense exact :header-inset-level="1" expand-separator icon="o_store" label="Caja Boleteria" default-opened to="cajaboleteria" expand-icon="null" v-if="store.boolcajabol"/>
+          <q-expansion-item dense exact :header-inset-level="1" expand-separator icon="o_store" label="Caja Candy" default-opened to="cajacandy" expand-icon="null" v-if="store.boolcajacandy"/>
+          <q-expansion-item dense exact :header-inset-level="1" expand-separator icon="o_movie" label="Reporte Funcion" default-opened to="reportefuncion" expand-icon="null" v-if="store.boolreporte"/>
+        </q-expansion-item>
+
+        <q-expansion-item dense exact expand-separator icon="o_home_work" label="Factura de Alquiler " to="rental" expand-icon="null" v-if="store.boolalquiler"/>
+        <q-expansion-item dense exact expand-separator icon="o_people" label="Clientes" to="cliente" expand-icon="null" v-if="store.boolcliente"/>
+        <q-expansion-item dense exact expand-separator icon="o_book_online" label="Cortesia" to="cortesia" expand-icon="null" v-if="store.boolcortesia"/>
+        
               <q-item clickable active-class="my-menu-link" to="/" exact>
                     <q-item-section avatar>
-                      <q-icon color="teal" name="home" />
+                    <q-icon color="teal" name="home" />
                     </q-item-section>
                     <q-item-section>Principal</q-item-section>
               </q-item>
         
           <q-item 
                clickable v-ripple to="/login" exact>
-          <q-item-section avatar>
-            <q-icon color="teal" name="login" />
-          </q-item-section>
-          <q-item-section>Ingreso</q-item-section>
+              <q-item-section avatar>
+              <q-icon color="teal" name="login" />
+              </q-item-section>
+              <q-item-section>Ingreso</q-item-section>
         </q-item>
-
 
           <q-item  
            clickable   active-class="my-menu-link" to="/User" exact>
@@ -67,7 +115,6 @@
           </q-item-section>
           <q-item-section>Reportes</q-item-section>
         </q-item>
-
 
         <q-item 
          clickable  @click="logout">
@@ -97,7 +144,7 @@ import {globalStore} from "stores/globalStore";
       }
   },
   created() {
-      this.eventSearch()
+     // this.eventSearch()
   },
    methods: {
     logout(){

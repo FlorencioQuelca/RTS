@@ -25,7 +25,7 @@ Route::post('login', [App\Http\Controllers\UserController::class, 'login']);
 Route::get('verificarComunicacion', [\App\Http\Controllers\ActivityController::class,'verificarComunicacion']);
 Route::group(['middleware'=>"auth:sanctum"],function (){
 
-  Route::apiResource('user', App\Http\Controllers\UserController::class);
+    Route::apiResource('/users', App\Http\Controllers\UserController::class);
     Route::apiResource('/permisos',\App\Http\Controllers\PermisoController::class);
     Route::put('/updatepermisos/{user}',[\App\Http\Controllers\UserController::class,'updatepermisos']);
   
@@ -39,4 +39,7 @@ Route::group(['middleware'=>"auth:sanctum"],function (){
 
     Route::get('userid/{user}',[\App\Http\Controllers\UserController::class,'userid'])->name('userid');
     Route::get('/userci/{id}',[\App\Http\Controllers\UserController::class,'userci'])->name('userci');
+
+
+    Route::apiResource('departamentos',\App\Http\Controllers\DepartamentoController::class); //CRUD de departamentos;
 });
