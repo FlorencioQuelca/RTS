@@ -11,11 +11,23 @@
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title>
-          EMPRESAM CONSTRUCTORA RTS
+        <q-toolbar-title class=" text-h4 text-bold">
+          {{ store.user.name }}
+          <span class=" text-subtitle2 text-red">{{ store.user.email }}</span>
         </q-toolbar-title>
 
-        <div>rts</div>
+       
+        <div>
+          <q-chip  color="red" v-if="store.eventNumber!=0" text-color="white" icon="warning_amber" :label="store.eventNumber+' Facturas no enviadas'" />
+          <b>Usuario:</b>{{store.user.name}}
+          <q-btn
+            flat
+            dense
+            round
+            icon="exit_to_app"
+            aria-label="Menu"
+            @click="logout"></q-btn>
+        </div>
       </q-toolbar>
     </q-header>
 
@@ -32,7 +44,7 @@
               </q-item>
         
           <q-item 
-               clickable v-ripple to="/Login" exact>
+               clickable v-ripple to="/login" exact>
           <q-item-section avatar>
             <q-icon color="teal" name="login" />
           </q-item-section>
@@ -41,7 +53,7 @@
 
 
           <q-item  
-           clickable   active-class="my-menu-link" to="/Usuarios" exact>
+           clickable   active-class="my-menu-link" to="/User" exact>
           <q-item-section avatar>
             <q-icon color="teal" name="today" />
           </q-item-section>
@@ -75,40 +87,52 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
- export default defineComponent({
+import {globalStore} from "stores/globalStore";
+ export default {
   name: 'MainLayout',
-
-  components: {
-   // EssentialLink
-  },
-
-  setup () {
-    const leftDrawerOpen = ref(false)
-
+  data () {
     return {
-    //  essentialLinks: linksList,
-      leftDrawerOpen,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
+           leftDrawerOpen: false,
+        store:globalStore()
+      }
+  },
+  created() {
+      this.eventSearch()
+  },
+   methods: {
+    logout(){
+      this.$q.dialog({
+        title: 'Cerrar sesión',
+        message: '¿Está seguro que desea cerrar sesión?',
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        this.$q.loading.show()
+        this.$api.post('logout').then(() => {
+          globalStore().user={}
+          localStorage.removeItem('tokenMulti')
+          globalStore().isLoggedIn=false
+          this.$router.push('/login')
+          this.$q.loading.hide()
+          globalStore().isLoggedIn=false
+        })
+      }).onCancel(() => {
+      })
+    },
+      eventSearch(){
+        this.$api.post('eventSearch').then(res=>{
+          console.log(res.data)
+          this.store.eventNumber=res.data
+        })
+      },
+      toggleLeftDrawer() {
+        this.leftDrawerOpen = !this.leftDrawerOpen
       }
     }
-  },
-   methods:{
-    logout(){
-      this.$q.loading.show()
-      this.$store.dispatch('login/logout')
-        .then(() => {
-          this.$q.loading.hide()
-          this.$router.push('/login')
-        })
-    }
-  },
-  mounted() {
-    // console.log(this.$store.state.login.user.name)
   }
-})
 </script>
+
+
 <style lang="sass">
 .my-menu-link
   color: blue

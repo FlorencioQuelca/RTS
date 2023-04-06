@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('ci')->nullable();
             $table->string('type')->default('USER');
             $table->date('fechalimite')->default('2024-12-31');
-            $table->string('status')->default('ACTIVO'); 
+            $table->string('estado')->default('ACTIVO'); 
             $table->string('apartment')->default('LA PAZ'); 
             $table->integer('cod_apartment')->default(1); 
             $table->string('password');

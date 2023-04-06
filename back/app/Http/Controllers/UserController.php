@@ -11,20 +11,29 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Models\Permiso;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
     public function login(Request $request)
     {
-        if (!Auth::attempt($request->all())) {
-            return response()->json(['res'=> false, 'message'=>"No existe usuario"], 400);
+         $validated = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+        $user = User::with('permisos')->where('email', $request->email)->whereDate('fechalimite','>=',date('Y-m-d'))->first();
+        if ($user && $user->estado='ACTIVO') {
+            if (Hash::check($request->password, $user->password)) {
+                $user = User::with('permisos')->where('email', $request->email)->first();
+                $token = $user->createToken('authToken')->plainTextToken;
+                return response(['user' => $user, 'token' => $token]);
+            } else {
+                return response(['message' => 'Contraseña incorrecta'],500);
+            }
+        } else {
+            return response(['message' => 'Usuario no encontrado'],500);
         }
-       if (User::where('email', $request->email)->whereDate('fechalimite', '>', now())->get()->count() == 0) {
-           return response()->json(['res' => 'Su usuario sobre paso el limite de ingreso'], 200);
-        }
-        $user = User::where('email', $request->email)->with(['permisos','registros'])->firstOrFail();
-        $token = $user->createToken('auth_token')->plainTextToken;
-        return response()->json(['token' => $token, 'user' => $user], 200);
+
     }
     public function logout(Request $request)
     {
@@ -62,9 +71,9 @@ class UserController extends Controller
                 $user->fechalimite=$request->fechalimite;
                 $user->password= Hash::make($request->password) ;
               //adicionado
-                $user->status = $request->departamento;
-                $user->ci = $request ->departamento_id;
-                $user->tipo = $request ->tipo;
+                $user->apartment = $request->apartment;
+                $user->cod_apartment = $request ->cod_apartment;
+                $user->type = $request ->type;
                 $user->save();
                 $permisos= array();
                 foreach ($request->permisos as $permiso){
@@ -103,14 +112,24 @@ class UserController extends Controller
         $user->delete();
     }
     public function me(Request $request){
-        $user=User::where('id',$request->user()->id)
-        //            ->with('unid')
-                    ->with('permisos')
-                    ->firstOrFail();
-                return $user;
+        $user=User::with('permisos')
+        ->where('id',$request->user()->id)
+        //->where('state','active')
+        //->whereDate('fechaLimite','>=',date('Y-m-d'))
+        ->firstOrFail();
+    return $user;
     }
     public function userci($id){
         return User::where('ci',$id)->get();
+    }
+    public function cambioestado(Request $request){
+        $user=User::find($request->id);
+        if($user->status=='ACTIVO')
+            $user->status='INACTIVO';
+        else
+            $user->status='ACTIVO';
+        $user->save();
+
     }
 
 

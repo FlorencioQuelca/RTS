@@ -1,17 +1,21 @@
-
-
+//import Login from "pages/Login";
+const User = import('../pages/User.vue')
+const Login = import('../pages/Login.vue')
 const routes = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/IndexPage.vue') },
-    //  { path: 'Login', component: Login, meta: { requiresAuth: false} },
-     // { path: 'Usuarios', component: Usuarios,meta: { requiresAuth: true }},
-
+    { path: '', component: () => import('pages/IndexPage.vue') },
+   
+      { path: 'User', component: User,meta: { requiresAuth: true }},
+  
     ]
   },
-
+  {
+    path: '/login',
+    component: Login,
+  },
   // Always leave this as last one,
   // but you can also remove it
   {

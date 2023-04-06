@@ -12,7 +12,7 @@
 const { configure } = require('quasar/wrappers');
 
 
-module.exports = configure(function (/* ctx */) {
+module.exports = configure(function ( ctx) {
   return {
     eslint: {
       // fix: true,
@@ -51,6 +51,7 @@ module.exports = configure(function (/* ctx */) {
 
       'roboto-font', // optional, you are not bound to it
       'material-icons', // optional, you are not bound to it
+      'material-icons-outlined',
     ],
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
@@ -83,6 +84,12 @@ module.exports = configure(function (/* ctx */) {
       // vitePlugins: [
       //   [ 'package-name', { ..options.. } ]
       // ]
+      env: {
+        API: ctx.dev
+          ? 'http://127.0.0.1:8000/api/'
+          : 'http://10.200.100.20:81/api/'
+      }
+      
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
@@ -96,7 +103,7 @@ module.exports = configure(function (/* ctx */) {
       config: {},
 
       // iconSet: 'material-icons', // Quasar icon set
-      // lang: 'en-US', // Quasar language pack
+       lang: 'es', // Quasar language pack
 
       // For special cases outside of where the auto-import strategy can have an impact
       // (like functional components as one of the examples),
@@ -106,7 +113,12 @@ module.exports = configure(function (/* ctx */) {
       // directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: [
+        'Notify',
+        'Loading',
+        'Dialog',
+        'LoadingBar'
+      ]
     },
 
     // animations: 'all', // --- includes all animations
