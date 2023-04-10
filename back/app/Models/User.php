@@ -20,6 +20,7 @@ class User extends Authenticatable
     protected $table ="users";
     protected $fillable = [
         'name',
+        'cargo',
         'email',
         'type',
         'fechalimite',
@@ -54,5 +55,12 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Permiso::class);
     }
-   
+  
+     public function pedidos(){
+        return $this->hasMany('App\Models\Pedido');
+     }
+    
+     
+     
+    
 }

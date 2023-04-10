@@ -42,4 +42,8 @@ Route::group(['middleware'=>"auth:sanctum"],function (){
 
 
     Route::apiResource('departamentos',\App\Http\Controllers\DepartamentoController::class); //CRUD de departamentos;
+    Route::apiResource('pedidos',\App\Http\Controllers\PedidoController::class); 
+    Route::apiResource('detalle',\App\Http\Controllers\DetalleController::class); 
+    Route::apiResource('fotos',\App\Http\Controllers\FotoController::class); 
+    Route::apiResource('deposito',\App\Http\Controllers\DepositoController::class); 
 });
