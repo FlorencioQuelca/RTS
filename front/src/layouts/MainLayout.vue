@@ -45,10 +45,12 @@
         <q-item-label header
         class="text-grey-8">   Opciones del menu </q-item-label>
     
-
-
         <q-expansion-item dense exact expand-separator icon="o_home" label="Principal" default-opened to="/" expand-icon="null"/>
-        <q-expansion-item dense exact expand-separator icon="o_people" label="Usuarios" to="User" expand-icon="null" />
+        <q-expansion-item dense exact expand-separator icon="o_people" label="Usuarios" to="User" expand-icon="null" active-class="my-menu-link" />
+        <q-expansion-item dense exact expand-separator icon="format_list_bulleted" label="Pedidos" to="Pedidos" expand-icon="null"  active-class="my-menu-link" />
+        <q-expansion-item dense exact expand-separator icon="o_price_change" label="Depositos" to="Deposito" expand-icon="null" active-class="my-menu-link"  />
+        <q-expansion-item dense exact expand-separator icon="receipt_long" label="Facturas/Recibos" to="Factura" expand-icon="null" active-class="my-menu-link" />
+        <q-expansion-item dense exact expand-separator icon="o_home_work" label="Proyectos" to="Proyectos" expand-icon="null" active-class="my-menu-link" />
         
         <q-expansion-item expand-separator dense exact icon="o_engineering" label="Siat" >
           <q-expansion-item dense exact :header-inset-level="1" expand-separator icon="o_psychology" label="Cuis" default-opened to="cuis" expand-icon="null" />
@@ -81,9 +83,9 @@
           <q-expansion-item dense exact :header-inset-level="1" expand-separator icon="o_movie" label="Reporte Funcion" default-opened to="reportefuncion" expand-icon="null" v-if="store.boolreporte"/>
         </q-expansion-item>
 
-        <q-expansion-item dense exact expand-separator icon="o_home_work" label="Factura de Alquiler " to="rental" expand-icon="null" v-if="store.boolalquiler"/>
-        <q-expansion-item dense exact expand-separator icon="o_people" label="Clientes" to="cliente" expand-icon="null" v-if="store.boolcliente"/>
-        <q-expansion-item dense exact expand-separator icon="o_book_online" label="Cortesia" to="cortesia" expand-icon="null" v-if="store.boolcortesia"/>
+        <q-expansion-item dense exact expand-separator icon="o_home_work" label="Factura de Alquiler " to="rental" expand-icon="null" />
+        <q-expansion-item dense exact expand-separator icon="o_people" label="Clientes" to="cliente" expand-icon="null" />
+        <q-expansion-item dense exact expand-separator icon="o_book_online" label="Cortesia" to="cortesia" expand-icon="null" />
         
               <q-item clickable active-class="my-menu-link" to="/" exact>
                     <q-item-section avatar>

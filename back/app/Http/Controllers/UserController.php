@@ -24,7 +24,7 @@ class UserController extends Controller
         $user = User::with('permisos')->where('email', $request->email)->whereDate('fechalimite','>=',date('Y-m-d'))->first();
         if ($user && $user->estado='ACTIVO') {
             if (Hash::check($request->password, $user->password)) {
-                $user = User::with('permisos')->where('email', $request->email)->first();
+                $user = User::with('permisos', 'pedidos')->where('email', $request->email)->first();
                 $token = $user->createToken('authToken')->plainTextToken;
                 return response(['user' => $user, 'token' => $token]);
             } else {
@@ -112,7 +112,7 @@ class UserController extends Controller
         $user->delete();
     }
     public function me(Request $request){
-        $user=User::with('permisos')
+        $user=User::with('permisos','pedidos')
         ->where('id',$request->user()->id)
         //->where('state','active')
         //->whereDate('fechaLimite','>=',date('Y-m-d'))

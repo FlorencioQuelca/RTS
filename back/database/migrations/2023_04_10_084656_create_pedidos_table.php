@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('pedidos', function (Blueprint $table) {
             $table->id();
-            $table->integer('codigo')->nullable();
-            $table->integer('codigoliral')->nullable();
+            $table->string('codigo')->nullable();
+            $table->integer('codigoliteral')->default(1);
             $table->string('lugar')->nullable();
             $table->date('fecha')->nullable();
             $table->time('hora')->nullable();
@@ -39,7 +39,10 @@ return new class extends Migration
              // usuarios 
             $table->unsignedBigInteger("user_id")->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
-
+              // usuarios 
+              $table->unsignedBigInteger("proyecto_id")->nullable();
+              $table->foreign('proyecto_id')->references('id')->on('proyectos')->onDelete('set null')->onUpdate('cascade');
+  
 
             $table->timestamps();
         });

@@ -15,6 +15,9 @@ class PermisoSeeder extends Seeder
     {
         DB::table('permisos')->insert([
             ['id'=>1,'nombre'=>'Usuarios'],
+            ['id'=>2,'nombre'=>'Pedidos'],
+            ['id'=>3,'nombre'=>'Depositos'],
+            ['id'=>4,'nombre'=>'Fotos'],
            
         ]);
     }
