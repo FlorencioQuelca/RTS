@@ -19,6 +19,7 @@
               <div class="col-6">
                 <q-input
                   filled
+                  dense
                   v-model="dato.name"
                   type="text"
                   label="Nombre "
@@ -28,6 +29,7 @@
                 />
                 <q-input
                   filled
+                  dense
                   v-model="dato.email"
                   type="email"
                   label="Email / usuario"
@@ -38,6 +40,7 @@
 
                 <q-input
                   filled
+                  dense
                   v-model="dato.password"
                   type="password"
                   label="Contraseña"
@@ -47,14 +50,18 @@
                 />
                 <q-input
                   filled
+                  dense
                   label="Fecha limite"
                   type="date"
                   v-model="dato.fechalimite"
                 />
 
-                 <q-input
+                 <q-select
                   filled
+                  dense
                   v-model="dato.type"
+                    :options="optionstype"
+                     options-dense
                   type="text"
                   label="Tipo "
                   hint="Ingresar Categoria o Tipo"
@@ -64,8 +71,10 @@
                 <!-- departamento-->
                   <q-select
                   filled
+                  dense
                   v-model="dato.apartment"
                   :options="departamentos"
+                  options-dense
                   type="text"
                   label="Departamento"
                   hint="Ingresar departamento que corresponda"
@@ -168,7 +177,8 @@
         <q-card-section class="q-pt-xs">
           <q-form @submit="onMod" class="q-gutter-md">
             <q-input
-              filled
+              outlined
+              dense
               v-model="dato2.name"
               type="text"
               label="Nombre "
@@ -178,7 +188,8 @@
             />
 
             <q-input
-              filled
+             outlined
+              dense
               v-model="dato2.email"
               type="email"
               label="Email"
@@ -188,25 +199,31 @@
             />
 
             <q-input
-              filled
+             outlined
+              dense
               label="Fecha limite"
               type="date"
               v-model="dato2.fechalimite"
             />
-              <q-input
-                  filled
+              <q-select
+                  outlined
+                  dense
                   v-model="dato2.type"
+                  :options="optionstype"
+                   options-dense
                   type="text"
                   label="Tipo "
-                  hint="Ingresar Categoria o Tipo"
+                  hint="Ingresar Categoria o Tipo de usuario"
                   lazy-rules
                   :rules="[(val) => (val && val.length > 0) || 'Por favor ingresa datos']"
                 />
                 <!-- departamento-->
                   <q-select
-                  filled
+                  outlined
+                  dense
                   v-model="dato2.apartment"
                   :options="departamentos"
+                   options-dense
                   type="text"
                   label="Departamento"
                   hint="Ingresar departamento que corresponda"
@@ -295,6 +312,9 @@ export default {
         { name: "opcion", label: "Opcion", field: "action", sortable: false },
       ],
       data: [],
+      optionstype: [
+        'ADMINISTRADOR', 'OPERADOR', 'CONSULTA',
+      ]
     };
   },
   created() {
@@ -317,7 +337,7 @@ export default {
       //   console.log(permiso)
       // },
     updatepermisos(){
-      this.$api.put(process.env.API+'/updatepermisos/'+this.dato2.id,{permisos:this.permisos2}).then(res=>{
+      this.$api.put('/updatepermisos/'+this.dato2.id,{permisos:this.permisos2}).then(res=>{
      //   console.log(res.data)
         this.modelpermiso=false
         this.misdatos()

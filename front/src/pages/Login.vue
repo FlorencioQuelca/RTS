@@ -124,7 +124,7 @@ export default {
           icon: 'check_circle',
           position: 'top'
         })
-        console.log(res.data)
+       // console.log(res.data)
         this.$router.push('/')
         this.store.user=res.data.user
         this.store.isLoggedIn=true

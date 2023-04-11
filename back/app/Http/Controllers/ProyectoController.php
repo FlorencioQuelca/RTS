@@ -17,7 +17,17 @@ class ProyectoController extends Controller
         $proyectos = Proyecto::all();
         return \response()->json($proyectos, 200);
     }
-
+    public function proyectosactivos()
+    {
+        try{
+            $proyectos = Proyecto::where('estado','ACTIVO')->get();
+            return \response()->json($proyectos, 200);
+             }
+             catch(\Exception $e){
+              return \response()->json(['res'=> false, 'message'=>$e->getMessage()],200);
+             }
+        
+    }
     /**
      * Show the form for creating a new resource.
      */

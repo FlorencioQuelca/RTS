@@ -7,8 +7,7 @@ export const globalStore = defineStore('global', {
     user: {},
     roles: [],
     isLoggedIn: !!localStorage.getItem('tokenRTS'),
-    
-
+  
   }),
   getters: {
     doubleCount: (state) => state.counter * 2,

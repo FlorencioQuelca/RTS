@@ -203,16 +203,28 @@ export default {
   created() {
 
     this.misdatos();
+   
     
   },
   methods: {
      misdatos(){
+        this.$q.loading.show();
       this.$api.get('proyectos').then(res=>{
         //console.log(res.data)
        this.data=res.data
-  
-    })
+         this.$q.loading.hide()
+    }).catch(err=>{
+        console.log(err.response.data);
+        this.$q.notify({
+          message:err.response.data.message,
+          icon:'close',
+          color:'red'
+        })
+        this.$q.loading.hide()
+      })
      },
+        
+     
    nuevo_form(){
      this.dialog_add=true
       this.dato.codigo=""

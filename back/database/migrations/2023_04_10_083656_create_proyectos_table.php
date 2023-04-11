@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string("codigo")->nullable();
             $table->string("nombre");
             $table->string("lugar")->nullable();
-            $table->string("estado")->nullable();
+            $table->string("estado")->default('ACTIVO');
             $table->string("observacion")->nullable();
             $table->timestamps();
         });

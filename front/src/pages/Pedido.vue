@@ -95,35 +95,41 @@
     <q-dialog v-model="dialog_add">
       <q-card style="max-width: 80%; width: 50%">
         <q-card-section class="bg-green-14 text-white">
-          <div class="text-h6"><q-icon name="add_circle" /> Nuevo Pedido</div>
+          <div class="text-h6"><q-icon name="add_circle" /> Nuevo Pedido de : {{ store.user.name }}</div>
         </q-card-section>
         <q-card-section class="q-pt-xs">
           <q-form @submit="onSubmit" class="q-gutter-md">
             <div class="row">
               <div class="col-12">
                
-                <q-input
-                  filled
-                  v-model="dato.proyecto"
+                <q-select
+                  outlined
+                  dense
+                  v-model="proyecto"
+                  :options="proyectos"
+                  options-dense
                   type="text"
                   label="Nombre del Proyecto"
                   hint="Nombre del Proyecto"
-                  lazy-rules
-                  :rules="[(val) => (val && val.length > 0) || 'Por favor ingresa datos']"
+                 
                 />
                
                 <q-input
-                  filled
+                  outlined
+                  dense
                   v-model="dato.justificacion"
-                  type="text"
+                  type="textarea"
                   label="justificacion"
                   hint="justificacion"
                   lazy-rules
                   :rules="[(val) => (val && val.length > 0) || 'Por favor ingresa datos']"
                 />
-                <q-input
-                  filled
+                <q-select
+                  outlined
+                  dense
                   v-model="dato.autorizado"
+                  :options="autorizadores"
+                  options-dense
                   type="text"
                   label="autorizado"
                   hint="autorizado"
@@ -208,6 +214,7 @@
 </template>
 
 <script>
+import {globalStore} from "stores/globalStore";
 import { date } from 'quasar'
 const { addToDate } = date
 export default {
@@ -236,32 +243,85 @@ export default {
       dato2: {},
       options: [
         'ACTIVO', 'PASIVO'
-      ]
+      ],
+      proyectos:[],
+      proyecto:{},
+      autorizadores:[],
+       store: globalStore(),
     };
   },
   created() {
-
     this.misdatos();
-    
+    this.misproyectos();
+    this.misautorizados();
   },
  methods: {
      misdatos(){
-      this.$api.get('pedidos').then(res=>{
-        //console.log(res.data)
-       this.data=res.data
-  
-    })
+        this.$q.loading.show()
+        this.$api.get('pedidos').then(res=>{
+      //  console.log(res.data)
+         this.data=res.data
+         this.$q.loading.hide()
+         }).catch(err=>{
+            this.$q.notify({
+          message:err.response.data.message,
+          icon:'close',
+          color:'red'
+        })
+        this.$q.loading.hide()
+     })
+     },
+     misproyectos(){
+       // this.$q.loading.show()
+        this.proyectos=[]
+      this.$api.get('proyectosactivos').then(res=>{
+             res.data.forEach((it)=>{
+              this.proyectos.push({label:it.nombre, value:it.id})
+            })
+    }).catch(err=>{
+        this.$q.notify({
+          message:err.response.data.message,
+          icon:'close',
+          color:'red'
+        })
+     
+     })
+     },
+      misautorizados(){
+        this.autorizadores=[]
+      this.$api.get('usersadmin').then(res=>{
+      //  console.log(res.data);
+             res.data.forEach((it)=>{
+              this.autorizadores.push(it.name)
+            })
+    }).catch(err=>{
+        this.$q.notify({
+          message:err.response.data.message,
+          icon:'close',
+          color:'red'
+        })
+     })
      },
    nuevo_form(){
-     this.dialog_add=true
-      this.dato.codigo=""
+     this.dato.codigo=""
       this.dato.nombre=""
       this.dato.lugar=""
+     // this.misproyectos()
+       if(this.proyectos.length!=null){
+         
+         this.proyecto=this.proyectos[0]
+       }else{
+         this.proyecto ={label:'no existe proyectos registrados',value:0}
+       }
+      // this.misautorizados()
+         this.dialog_add=true
    },
     onSubmit(){
-       this.$q.loading.show();
-       this.dato.estado="ACTIVO"
-      this.$api.post( "proyectos", this.dato).then((res) => {
+      this.$q.loading.show()
+      this.dato.estado="ACTIVO"
+      this.dato.proyecto_id=this.proyecto.value
+      this.dato.proyecto_id=this.proyecto.value
+      this.$api.post( "pedidos", this.dato).then((res) => {
         this.$q.notify({
           color: "green-4",
           textColor: "white",

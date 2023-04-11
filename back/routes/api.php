@@ -35,14 +35,16 @@ Route::group(['middleware'=>"auth:sanctum"],function (){
     Route::post('/me',[\App\Http\Controllers\UserController::class,'me']); //ok
     Route::put('updatePassword/{user}', [\App\Http\Controllers\UserController::class, 'updatePassword']); //ok
     Route::put('cambioestado/{user}', [\App\Http\Controllers\UserController::class, 'cambioestado']); //ok
-
-
+    
+    
     Route::get('userid/{user}',[\App\Http\Controllers\UserController::class,'userid'])->name('userid');
     Route::get('/userci/{id}',[\App\Http\Controllers\UserController::class,'userci'])->name('userci');
-
-
+    
+    Route::get('usersadmin',[\App\Http\Controllers\UserController::class,'usersadmin'])->name('usersadmin'); //ok
+    
     Route::apiResource('departamentos',\App\Http\Controllers\DepartamentoController::class); //CRUD de departamentos;
     Route::apiResource('proyectos',\App\Http\Controllers\ProyectoController::class); 
+    Route::get('proyectosactivos',[\App\Http\Controllers\ProyectoController::class,'proyectosactivos'])->name('proyectosactivos'); //ok
     Route::apiResource('pedidos',\App\Http\Controllers\PedidoController::class); 
     Route::apiResource('detalle',\App\Http\Controllers\DetalleController::class); 
     Route::apiResource('fotos',\App\Http\Controllers\FotoController::class); 

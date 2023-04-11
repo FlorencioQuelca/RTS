@@ -69,17 +69,17 @@
         <q-expansion-item dense exact expand-separator icon="receipt_long" label="Producto" to="productos" expand-icon="null" />
         <q-expansion-item dense exact expand-separator icon="calendar_month" label="Programación" to="programa" expand-icon="null" v-if="store.boolprogram"/>
 <!--        <q-expansion-item dense exact expand-separator icon="o_local_activity" label="Venta de boletos" to="sale" expand-icon="null"/>-->
-        <q-expansion-item expand-separator dense exact icon="o_local_activity" label="Venta Boleteria" v-if="store.boolboleteria||store.boollistbol">
-          <q-expansion-item dense exact :header-inset-level="1" expand-separator icon="o_local_activity" label="Venta de boletos" default-opened to="sale" expand-icon="null" v-if="store.boolboleteria"/>
-          <q-expansion-item dense exact :header-inset-level="1" expand-separator icon="o_cast_for_education" label="Listado de ventas" default-opened to="listaVenta" expand-icon="null" v-if="store.boollistbol"/>
+        <q-expansion-item expand-separator dense exact icon="o_local_activity" label="Venta Boleteria">
+          <q-expansion-item dense exact :header-inset-level="1" expand-separator icon="o_local_activity" label="Venta de boletos" default-opened to="sale" expand-icon="null" />
+          <q-expansion-item dense exact :header-inset-level="1" expand-separator icon="o_cast_for_education" label="Listado de ventas" default-opened to="listaVenta" expand-icon="null" />
         </q-expansion-item>
         <q-expansion-item expand-separator dense exact icon="o_store" label="Candy Bar" >
           <q-expansion-item dense exact :header-inset-level="1" expand-separator icon="o_store" label="Venta Candy Bar" default-opened to="candy" expand-icon="null" v-if="store.boolcandy"/>
-          <q-expansion-item dense exact :header-inset-level="1" expand-separator icon="o_cast_for_education" label="Listado de ventas" default-opened to="listaVentaCandy" expand-icon="null" v-if="store.boollistcandy"/>
+          <q-expansion-item dense exact :header-inset-level="1" expand-separator icon="o_cast_for_education" label="Listado de ventas" default-opened to="listaVentaCandy" expand-icon="null" />
         </q-expansion-item>
         <q-expansion-item expand-separator dense exact icon="o_store" label="Reporte Caja" >
-          <q-expansion-item dense exact :header-inset-level="1" expand-separator icon="o_store" label="Caja Boleteria" default-opened to="cajaboleteria" expand-icon="null" v-if="store.boolcajabol"/>
-          <q-expansion-item dense exact :header-inset-level="1" expand-separator icon="o_store" label="Caja Candy" default-opened to="cajacandy" expand-icon="null" v-if="store.boolcajacandy"/>
+          <q-expansion-item dense exact :header-inset-level="1" expand-separator icon="o_store" label="Caja Boleteria" default-opened to="cajaboleteria" expand-icon="null"/>
+          <q-expansion-item dense exact :header-inset-level="1" expand-separator icon="o_store" label="Caja Candy" default-opened to="cajacandy" expand-icon="null" />
           <q-expansion-item dense exact :header-inset-level="1" expand-separator icon="o_movie" label="Reporte Funcion" default-opened to="reportefuncion" expand-icon="null" v-if="store.boolreporte"/>
         </q-expansion-item>
 
@@ -141,7 +141,7 @@ import {globalStore} from "stores/globalStore";
   name: 'MainLayout',
   data () {
     return {
-           leftDrawerOpen: false,
+       leftDrawerOpen: false,
         store:globalStore()
       }
   },
@@ -159,7 +159,7 @@ import {globalStore} from "stores/globalStore";
         this.$q.loading.show()
         this.$api.post('logout').then(() => {
           globalStore().user={}
-          localStorage.removeItem('tokenMulti')
+          localStorage.removeItem('tokenRTS')
           globalStore().isLoggedIn=false
           this.$router.push('/login')
           this.$q.loading.hide()
@@ -170,7 +170,7 @@ import {globalStore} from "stores/globalStore";
     },
       eventSearch(){
         this.$api.post('eventSearch').then(res=>{
-          console.log(res.data)
+         // console.log(res.data)
           this.store.eventNumber=res.data
         })
       },

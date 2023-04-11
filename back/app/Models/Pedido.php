@@ -49,4 +49,12 @@ class Pedido extends Model
     return $this->belongsTo('App\Models\User');
  }
 
+
+
+ 
+  public function proyecto(){
+    return $this->belongsTo('App\Models\Proyecto');
+ }
+
+
 }

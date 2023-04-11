@@ -14,7 +14,9 @@ class PedidoController extends Controller
      */
     public function index()
     {
-        $proyectos = Proyecto::with(['pedidos','depositos','fotos'])->orderByDesc('id')->get();
+       // $pedido = Pedido::with(['proyectos','usuarios','depositos','fotos','detalles'])->orderByDesc('id')->get();
+        $pedido = Pedido::all();
+        return \response()->json($pedido, 200);
 
     }
 
@@ -31,7 +33,7 @@ class PedidoController extends Controller
      */
     public function store(StorePedidoRequest $request)
     {
-        Proyecto::create($request->all());
+        Pedido::create($request->all());
         return \response()->json(['res'=> true, 'message'=>'insertado correctamente'],200);
     }
 

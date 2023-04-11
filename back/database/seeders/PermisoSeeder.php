@@ -18,6 +18,8 @@ class PermisoSeeder extends Seeder
             ['id'=>2,'nombre'=>'Pedidos'],
             ['id'=>3,'nombre'=>'Depositos'],
             ['id'=>4,'nombre'=>'Fotos'],
+            ['id'=>5,'nombre'=>'Proyectos'],
+            ['id'=>6,'nombre'=>'Departamentos'],
            
         ]);
     }

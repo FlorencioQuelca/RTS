@@ -33,7 +33,17 @@ class UserController extends Controller
         } else {
             return response(['message' => 'Usuario no encontrado'],500);
         }
-
+    }
+    
+    public function usersadmin(){
+           try{
+            // return Persona::get();
+              $personas= User::where('type','ADMINISTRADOR')->get();
+               return \response()->json($personas,200);
+             }
+             catch(\Exception $e){
+              return \response()->json(['res'=> false, 'message'=>$e->getMessage()],200);
+             }
     }
     public function logout(Request $request)
     {
