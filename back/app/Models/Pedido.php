@@ -38,15 +38,15 @@ class Pedido extends Model
     public function depositos(){
         return $this->hasMany(Deposito::class);
     }
-    public function Detalles(){
+    public function detalles(){
         return $this->hasMany(Detalle::class);
     }
     public function fotos(){
-        return $this->hasMany(Fotos::class);
+        return $this->hasMany(Foto::class);
     }
   //relacion uno a muchos inversa
   public function user(){
-    return $this->belongsTo('App\Models\User');
+    return $this->belongsTo(User::class);
  }
 
 

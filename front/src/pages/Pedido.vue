@@ -8,7 +8,6 @@
       class="q-mb-xs"
     />
        <!-- Nuevo usuario-->
-    
 <!-- TABLA PRINCIPAL -->
     <q-table :filter="filter" title="Usuarios del sistema"
       :rows="data"
@@ -31,16 +30,16 @@
             {{props.row.codigo}}
           </q-td>
            <q-td key="departamento" :props="props">
-            {{props.row.departamento}}
-          </q-td>
-          <q-td key="fecha" :props="props">
-            {{props.row.fecha}}
-          </q-td>
-           <q-td key="proyecto" :props="props">
-            {{props.row.proyecto}}
+            {{props.row.user.apartment}}
           </q-td>
           <q-td key="solicitante" :props="props">
-            {{props.row.solicitante}}
+            {{props.row.user.name}}
+          </q-td>
+          <q-td key="fecha" :props="props">
+            {{props.row.fecha}} a:  {{props.row.hora}}
+          </q-td>
+           <q-td key="proyecto" :props="props">
+            {{props.row.proyecto.nombre}}
           </q-td>
           <q-td key="justificacion" :props="props">
             {{props.row.justificacion}}
@@ -51,6 +50,12 @@
           <q-td key="etapa" :props="props">
             {{props.row.etapa}}
           </q-td>
+            <q-td key="estado" :props="props">
+            {{props.row.estado}}
+          </q-td>
+            <q-td key="saldo" :props="props">
+            {{props.row.saldo}}
+          </q-td>
           <q-td key="opcion" :props="props">
           <q-btn
               dense
@@ -60,23 +65,23 @@
               @click="editRow(props)"
               icon="edit"
           />
-            <q-btn
-              dense
-              round
-              flat
-            color="positive"
-            @click="cambiopass(props)"
-            icon="vpn_key"
-            />
-            <q-btn
-              dense
-              round
-              flat
-              color="green-10"
-              @click="mispermisos(props)"
-              icon="post_add"
-            />
-            <q-btn
+             <q-btn 
+                        dense
+                        round
+                        flat
+                        color="blue"
+                        @click="verRow(props)"
+                        icon="groups"
+                      ></q-btn>
+                       <q-btn v-if="store.user.type==='ADMINISTRADOR'"
+                        dense
+                        round
+                        flat
+                        color="green"
+                        @click="click_send(props)"
+                        icon="lock_open"
+                      ></q-btn>
+            <q-btn v-if="store.user.type==='ADMINISTRADOR'"
               dense
               round
               flat
@@ -85,12 +90,9 @@
               icon="delete"
             ></q-btn>
           </q-td>
-
         </q-tr>
       </template>
     </q-table>
-
-
    <!--  nuevo Pedido -->
     <q-dialog v-model="dialog_add">
       <q-card style="max-width: 80%; width: 50%">
@@ -101,7 +103,6 @@
           <q-form @submit="onSubmit" class="q-gutter-md">
             <div class="row">
               <div class="col-12">
-               
                 <q-select
                   outlined
                   dense
@@ -111,10 +112,8 @@
                   type="text"
                   label="Nombre del Proyecto"
                   hint="Nombre del Proyecto"
-                 
                 />
-               
-                <q-input
+             <q-input
                   outlined
                   dense
                   v-model="dato.justificacion"
@@ -124,18 +123,7 @@
                   lazy-rules
                   :rules="[(val) => (val && val.length > 0) || 'Por favor ingresa datos']"
                 />
-                <q-select
-                  outlined
-                  dense
-                  v-model="dato.autorizado"
-                  :options="autorizadores"
-                  options-dense
-                  type="text"
-                  label="autorizado"
-                  hint="autorizado"
-                  lazy-rules
-                  :rules="[(val) => (val && val.length > 0) || 'Por favor ingresa datos']"
-                />
+               
               </div>
              
             </div>
@@ -159,39 +147,24 @@
           <q-form @submit="onMod" class="q-gutter-md">
             <div class="row">
               <div class="col-12">
-                <q-input
-                  filled
-                  v-model="dato2.codigo"
-                  type="text"
-                  label="Codigo"
-                  hint="Ingresar Codigo del Proyecto"
-                  lazy-rules
-                  :rules="[(val) => (val && val.length > 0) || 'Por favor ingresa datos']"
-                />
-                <q-input
-                  filled
-                  v-model="dato2.nombre"
+                  <q-select
+                  outlined
+                  dense
+                  v-model="proyecto"
+                  :options="proyectos"
+                  options-dense
                   type="text"
                   label="Nombre del Proyecto"
                   hint="Nombre del Proyecto"
-                  lazy-rules
-                  :rules="[(val) => (val && val.length > 0) || 'Por favor ingresa datos']"
                 />
+               
                 <q-input
-                  filled
-                  v-model="dato2.lugar"
-                  type="text"
-                  label="Lugar del Proyecto"
-                  hint="Lugar del Proyecto"
-                  lazy-rules
-                  :rules="[(val) => (val && val.length > 0) || 'Por favor ingresa datos']"
-                />
-                 <q-select
-                  Outlined
-                  v-model="dato2.estado"
-                  :options="options"
-                  label="Estado"
-                  hint="Estado"
+                  outlined
+                  dense
+                  v-model="dato2.justificacion"
+                  type="textarea"
+                  label="justificacion"
+                  hint="justificacion"
                   lazy-rules
                   :rules="[(val) => (val && val.length > 0) || 'Por favor ingresa datos']"
                 />
@@ -225,9 +198,9 @@ export default {
       columns: [
         {name: "codigo", align: "left", label: "N° ", field: "codigo", sortable: true,},
         {name: "departamento", align: "left", label: "Departamento", field: "departamento", sortable: true,},
-        {name: "fecha", align: "left", label: "Fecha", field: "fecha", sortable: true,},
-        {name: "proyecto", align: "left", label: "Proyecto", field: "proyecto", sortable: true,},
         {name: "solicitante", align: "left", label: "Solicitante", field: "solicitante", sortable: true,},
+        {name: "fecha", align: "left", label: "Fecha y Hora", field: "fecha", sortable: true,},
+        {name: "proyecto", align: "left", label: "Nombre del Proyecto", field: "proyecto", sortable: true,},
         {name: "justificacion", align: "left", label: "Justificacion", field: "justificacion", sortable: true,},
         {name: "monto", align: "left", label: "Monto Solicitado", field: "monto", sortable: true,},
         {name: "etapa", align: "left", label: "Etapa", field: "etapa", sortable: true,},
@@ -318,9 +291,8 @@ export default {
    },
     onSubmit(){
       this.$q.loading.show()
-      this.dato.estado="ACTIVO"
       this.dato.proyecto_id=this.proyecto.value
-      this.dato.proyecto_id=this.proyecto.value
+      this.dato.user_id=this.store.user.id
       this.$api.post( "pedidos", this.dato).then((res) => {
         this.$q.notify({
           color: "green-4",
@@ -344,8 +316,8 @@ export default {
     deleteRow(props){
       this.dato2=props.row
         this.$q.dialog({
-                  title: 'Eliminar Proyecto',
-                  message: '¿Esta seguro de eliminar la proyecto?',
+                  title: 'Eliminar Pedido',
+                  message: '¿Esta seguro de eliminar el Pedido?',
                   ok: {
                   push: true,
                    color: 'positive'
@@ -354,14 +326,13 @@ export default {
                   push: true,
                     color: 'negative'
                    }
-                 
                 }).onOk(() => {
                  this.$q.loading.show()
-                this.$api.delete("proyectos/" + this.dato2.id ).then((res) => {
+                this.$api.delete("pedidos/" + this.dato2.id ).then((res) => {
                             this.$q.notify({
                               textColor: "positive",
                               icon: "done",
-                              message: "Proyecto Eliminado",
+                              message: "Pedido Eliminado",
                             });
                           this.$q.loading.hide()
                           this.misdatos()
@@ -372,21 +343,26 @@ export default {
                         icon:'close',
                         color:'red'
                       })
-        this.$q.loading.hide()
-      })
+                  this.$q.loading.hide()
+                })
                 }).onCancel(() => {
                     this.$q.loading.hide()
                 })
-  
      },
      editRow(props){
       this.dato2=props.row
-     this.dialog_mod=true
+      this.proyecto={}
+      this.proyectos.forEach(it => {
+           if(it.label===props.row.proyecto.nombre){
+                this.proyecto={label:it.label,value:it.value}
+           }
+        });
+      this.dialog_mod=true
      },
       onMod() {
       this.$q.loading.show();
-    
-      this.$api.put("proyectos/" + this.dato2.id, this.dato2).then((res) => {
+      this.dato2.proyecto_id=this.proyecto.value
+      this.$api.put("pedidos/" + this.dato2.id, this.dato2).then((res) => {
           this.$q.notify({
             color: "green-4",
             textColor: "white",
@@ -396,7 +372,6 @@ export default {
           this.dialog_mod = false;
           this.misdatos();
           this.$q.loading.hide()
-
         }).catch(err=>{
         console.log(err.response.data);
         this.$q.notify({
@@ -407,6 +382,49 @@ export default {
         this.$q.loading.hide()
       })
     },
+    verRow(item){
+      this.dato2 = item.row;
+      this.$router.push({name: 'DetallePedidos.view', params: {id:this.dato2.id}})
+    },
+    click_send(item){
+
+                 this.$q.dialog({
+                  title: 'Habilitar Pedido',
+                  message: '¿Esta seguro HABILITAR el pedido para edicion ?',
+                  ok: {
+                  push: true,
+                   color: 'positive'
+                  },
+                    cancel: {
+                  push: true,
+                    color: 'negative'
+                   }
+                }).onOk(() => {
+                 this.$q.loading.show()
+             
+                  this.$api.put("pedidoedit/"+item.row.id, {etapa:"NUEVO"}).then((res) => {
+                    this.$q.notify({
+                        color: "green-4",
+                        textColor: "white",
+                        icon: "cloud_done",
+                        message: "Enviado correctamente",
+                    });
+                    this.misdatos();
+                    this.$q.loading.hide()
+                    }).catch(err=>{
+                    console.log(err.response.data);
+                    this.$q.notify({
+                    message:err.response.data.message,
+                    icon:'close',
+                    color:'red'
+                    })
+                    this.$q.loading.hide()
+                })
+                }).onCancel(() => {
+                    this.$q.loading.hide()
+                })
+     
+     }
   }
   
 };

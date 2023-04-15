@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('pedidos', function (Blueprint $table) {
             $table->id();
-            $table->string('codigo')->nullable();
-            $table->integer('codigoliteral')->default(1);
+            $table->integer('codigo')->unique();
+            $table->string('codigoliteral')->default('1');
             $table->string('lugar')->nullable();
             $table->date('fecha')->nullable();
             $table->time('hora')->nullable();
@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('autorizado')->nullable();
             $table->string('vistoBueno')->nullable();
             $table->string('observacion')->nullable();
-            $table->string('estado')->nullable();
+            $table->string('estado')->default('ACTIVO');
             $table->string('etapa')->nullable();
             $table->string('activo')->default('ACTIVO');
             

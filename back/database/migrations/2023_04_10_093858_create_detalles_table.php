@@ -21,7 +21,7 @@ return new class extends Migration
              // solicitado/cotizado
          
              $table->string('cantidadrecibo')->nullable();
-             $table->string('detallerecibo0')->nullable();
+             $table->string('detallerecibo')->nullable();
              $table->decimal('preciorecibo',20,2)->default(0);
              $table->decimal('subtotalrecibo',20,2)->default(0);
              

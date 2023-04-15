@@ -14,10 +14,18 @@ class PedidoController extends Controller
      */
     public function index()
     {
-       // $pedido = Pedido::with(['proyectos','usuarios','depositos','fotos','detalles'])->orderByDesc('id')->get();
-        $pedido = Pedido::all();
+        $pedido = Pedido::with(['proyecto','user','depositos','fotos','detalles'])->orderByDesc('id')->get();
+        //$pedido = Pedido::all();
         return \response()->json($pedido, 200);
 
+    }
+
+    public function pedidoid(Pedido $pedido)
+    {
+        $pedido =Pedido::with(['proyecto','user','depositos','fotos','detalles'])
+                            ->orWhere('id', '=', $pedido->id)->get();
+
+        return \response()->json($pedido,200);
     }
 
     /**
@@ -33,7 +41,21 @@ class PedidoController extends Controller
      */
     public function store(StorePedidoRequest $request)
     {
-        Pedido::create($request->all());
+       $maxValue = Pedido::max('codigo');
+        $pedido=new Pedido();
+         if( is_numeric($maxValue) && $maxValue>0){
+                 $pedido->codigo=$maxValue+1;
+            }else{
+                $pedido->codigo=1;
+            }
+        $pedido->fecha=date('Y-m-d');
+        $pedido->hora=date('H:i:s');
+        $pedido->etapa="NUEVO";
+        $pedido->estado="ACTIVO";
+        $pedido->proyecto_id=$request->proyecto_id;
+        $pedido->user_id=$request->user_id;
+        $pedido->justificacion=$request->justificacion;
+        $pedido->save();
         return \response()->json(['res'=> true, 'message'=>'insertado correctamente'],200);
     }
 
@@ -45,7 +67,6 @@ class PedidoController extends Controller
         return $pedido;
         return \response()->json($pedido,200);
     }
-
     /**
      * Show the form for editing the specified resource.
      */
@@ -53,15 +74,24 @@ class PedidoController extends Controller
     {
         //
     }
-
     /**
      * Update the specified resource in storage.
      */
     public function update(UpdatePedidoRequest $request, Pedido $pedido)
-    {
-        $pedido->update($request->all());
+    { 
+        $pedido->justificacion=$request->justificacion;
+        $pedido->proyecto_id=$request->proyecto_id;
+       // $pedido->update($request->all());
+        $pedido->save();
         return \response()->json(['res'=> true, 'message'=>'modificado  correctamente'],200);
     }
+    public function pedidoedit(UpdatePedidoRequest $request, Pedido $pedido)
+    { 
+        $pedido->etapa=$request->etapa;
+        $pedido->save();
+        return \response()->json(['res'=> true, 'message'=>'modificado  correctamente'],200);
+    }
+
 
     /**
      * Remove the specified resource from storage.

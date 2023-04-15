@@ -31,8 +31,24 @@ class DetalleController extends Controller
      */
     public function store(StoreDetalleRequest $request)
     {
-        Detalle::create($request->all());
+        $maxValue = Detalle::max('num');
+        $detalle=new Detalle();
+         if( is_numeric($maxValue) && $maxValue>0){
+                 $detalle->num=$maxValue+1;
+            }else{
+                $detalle->num=1;
+            }
+        $detalle->estado="ACTIVO";
+        $detalle->unidad=$request->unidad;
+        $detalle->pedido_id=$request->pedido_id;
+        $detalle->cantidadrecibo=$request->cantidadrecibo;
+        $detalle->detallerecibo=$request->detallerecibo;
+        $detalle->preciorecibo=$request->preciorecibo;
+        $detalle->subtotalrecibo=$request->subtotalrecibo;
+        $detalle->save();
         return \response()->json(['res'=> true, 'message'=>'insertado correctamente'],200);
+       // Detalle::create($request->all());
+       // return \response()->json(['res'=> true, 'message'=>'insertado correctamente'],200);
     }
 
     /**

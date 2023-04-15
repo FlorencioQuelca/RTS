@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('ci')->nullable();
-            $table->string('type')->default('USER');
+            $table->string('type')->default('ADMINISTRADOR');
             $table->date('fechalimite')->default('2024-12-31');
             $table->string('estado')->default('ACTIVO'); 
             $table->string('apartment')->default('LA PAZ'); 
