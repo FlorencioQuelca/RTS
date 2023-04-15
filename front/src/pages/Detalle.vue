@@ -61,7 +61,15 @@
         </div>
       </q-card-section>
 
-
+ <q-expansion-item
+        
+        expand-separator
+        icon="receipt"
+        label="DETALLE DEL PEDIDO"
+        header-class="text-white"
+         default-opened
+      >
+      <q-card>
         
         <q-btn v-if="this.data.etapa==='NUEVO'"
                 icon="send"
@@ -144,13 +152,27 @@
           </q-table>
         </q-card-section>
 
+       </q-card>
+      </q-expansion-item>
+
+
         <q-expansion-item
-        dense
-        dense-toggle
         expand-separator
-        icon="perm_identity"
-        label="Account settings"
-        header-class="text-purple"
+        icon="send"
+        label="DEPOSITOS REALIZADOS"
+        header-class="text-white"
+         default-opened
+      >
+        <q-card>
+
+       </q-card>
+      </q-expansion-item>
+        
+        <q-expansion-item
+        expand-separator
+        icon="o_price_change"
+        label="ADICION DE FOTOGRAFIAS"
+        header-class="text-white"
          default-opened
       >
       <q-card>
@@ -210,6 +232,20 @@
         </q-card-section>
         </q-card>
       </q-expansion-item>
+
+      
+        <q-expansion-item
+        expand-separator
+        icon="assessment"
+        label="REPORTES"
+        header-class="text-white"
+         default-opened
+      >
+        <q-card>
+
+       </q-card>
+      </q-expansion-item>
+        
         
         
 
