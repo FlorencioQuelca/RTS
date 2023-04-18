@@ -12,19 +12,18 @@ class Deposito extends Model
     protected $table ='depositos';
 
     protected $fillable = [
-        "reembolso",
+        "deposito",
         "glosa",
         "descripcion",
         "moneda",
-        "montotransferido",
+        "monto",
         "literal",
-        "cuentadestino",
-        "nombredestino",
-        "cuentaorigen",
-        "nombreorigen",
+        "origen",
+        "destino",
         "fecha",
         "hora",
         "numerodocumento",
+        "observacion",
         "foto_url",
         "pedido_id"
     ];

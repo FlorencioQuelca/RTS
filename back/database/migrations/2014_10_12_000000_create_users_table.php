@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('apartment')->default('LA PAZ'); 
             $table->integer('cod_apartment')->default(1); 
             $table->string('password');
+            $table->string('cuenta')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

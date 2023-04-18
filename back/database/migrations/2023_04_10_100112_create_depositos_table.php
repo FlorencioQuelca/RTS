@@ -15,19 +15,19 @@ return new class extends Migration
             $table->id();
 
             //deposito para el pedido
-            $table->string('reembolso')->nullable();
+            $table->string('deposito')->default("NO");
             $table->string('glosa')->nullable();
             $table->string('descripcion')->nullable();
             $table->string('moneda')->nullable();
-            $table->decimal('montotrasferido',20,2)->default(0);
+            $table->decimal('monto',20,2)->default(0);
             $table->string('literaltrasferido')->nullable();
-            $table->string('cuentadestino')->nullable();
-            $table->string('nombredestino')->nullable();
-            $table->string('cuentaorigen')->nullable();
-            $table->string('nombreorigen')->nullable();
-            $table->date('fechaaprobado')->nullable();
-            $table->time('horaaprobado')->nullable();
+            $table->string('origen')->nullable();
+            $table->string('destino')->nullable();
+            $table->date('fecha')->nullable();
+            $table->time('hora')->nullable();
             $table->string('numerodocumento')->nullable();
+            $table->string('observacion')->nullable();
+            $table->string('estado')->nullable();
             $table->string('foto_url')->nullable();
              // usuarios 
              $table->unsignedBigInteger("pedido_id")->nullable();

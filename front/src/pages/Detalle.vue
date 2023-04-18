@@ -155,7 +155,6 @@
        </q-card>
       </q-expansion-item>
 
-
         <q-expansion-item
         expand-separator
         icon="send"
@@ -163,7 +162,72 @@
         header-class="text-white"
          default-opened
       >
+        <q-btn  
+                icon="add_circle"
+                 label="Nuevo"
+                @click="click_add_deposito"
+                color="blue"
+              
+              />
         <q-card>
+         <q-card-section class="q-pt-xs">
+          <q-table
+            :rows="data.depositos"
+            :columns="subcol2"
+            separator="cell"
+            dense
+            :rows-per-page-options="[0]"
+          >
+            <template v-slot:body="props">
+              <q-tr :props="props">
+                <q-td key="deposito" :props="props">
+                  {{ props.row.deposito }}
+                </q-td>
+                <q-td key="monto" :props="props">
+                  {{ props.row.monto }} : {{ props.row.moneda }}
+                </q-td>
+                 <q-td key="codigo" :props="props">
+                  {{ props.row.numerodocumento }}
+                </q-td>
+                <q-td key="origen" :props="props">
+                  {{ props.row.origen }}
+                </q-td>
+                <q-td key="destino" :props="props">
+                  {{ props.row.destino }}
+                </q-td>
+                <q-td key="fecha" :props="props">
+                  {{ props.row.fecha }} -  {{ props.row.hora }}
+                </q-td>
+                <q-td key="foto" :props="props">
+                  {{ props.row.foto_url }} 
+                </q-td>
+                 <q-td key="observacion" :props="props">
+                  {{ props.row.observacion }}
+                </q-td>
+                <q-td key="opcion" :props="props">
+                    <q-btn 
+                        dense
+                        round
+                        flat
+                        color="yellow"
+                        @click="editDeposito(props)"
+                        icon="edit"
+                    />
+                        <q-btn  
+                        dense
+                        round
+                        flat
+                        color="red"
+                        @click="deleteDeposito(props)"
+                        icon="delete"
+                        ></q-btn>
+          </q-td>
+              </q-tr>
+            </template>
+          </q-table>
+        </q-card-section>
+
+
 
        </q-card>
       </q-expansion-item>
@@ -195,8 +259,6 @@
               </div>
              
         </q-card-section>
-
-
 
         <q-card-section class="q-pt-xs">
          <q-carousel
@@ -331,7 +393,7 @@
     </q-dialog>
 
 
- <!-- EDITAR ITEL DEL  pedido -->
+ <!-- EDITAR ITEm DEL  pedido -->
     <q-dialog v-model="dialog_mod_detalle">
       <q-card style="max-width: 80%; width: 50%">
         <q-card-section class="bg-green-14 text-white">
@@ -422,6 +484,214 @@
       </q-card>
     </q-dialog>
 
+    
+
+ <!--  Nuevo deposito -->
+    <q-dialog v-model="dialog_add_deposito">
+      <q-card style="max-width: 80%; width: 50%">
+        <q-card-section class="bg-green-14 text-white">
+          <div class="text-h6"><q-icon name="add_circle" />Nuevo Deposito</div>
+        </q-card-section>
+        <q-card-section class="q-pt-xs">
+          <q-form @submit="onAddDeposito" class="q-gutter-md">
+                <div v-if="data.depositos.length===0">
+                <q-toggle v-model="dato.deposito" label="Aprobar con un deposito ?" class="q-mb-md" true-value="SI" false-value="NO" />
+                </div>
+             
+              <div class="row" v-if="data.depositos.length>0  || dato.deposito==='SI'">
+                <div class="col-6">
+                  <q-input  
+                  outlined
+                  dense
+                  v-model="dato.monto"
+                  type="number"
+                   step="1"
+                  label="monto a depositar"
+                  hint="Monto a Depositar"
+                  lazy-rules
+                  :rules="[(val) => (val  > 0) || 'Por favor ingresa datos']"
+                  />  
+                </div>
+                <div class="col-6">
+                        <q-select
+                        outlined
+                        dense
+                        v-model="dato.moneda"
+                        :options="monedas"
+                        type="text"
+                        label="moneda"
+                        hint="tipo de moneda "
+                        lazy-rules
+                        :rules="[(val) => (val && val.length > 0) || 'Por favor ingresa datos']"
+                        /> 
+                </div>
+             </div>
+                <div class="row" v-if="data.depositos.length>0  || dato.deposito==='SI'">    
+                          <div class="col-6">
+                            <q-select
+                            outlined
+                            dense
+                            v-model="dato.origen"
+                            :options="autorizadores"
+                            type="text"
+                            label="Nombre del usuario que deposita"
+                            hint="Origen"
+                            lazy-rules
+                            :rules="[(val) => (val && val.length > 0) || 'Por favor ingresa datos']"
+                            />
+                          </div>
+                            <div class="col-6">
+                            <q-select
+                            outlined
+                            dense
+                            v-model="dato.destino"
+                            :options="autorizadores"
+                            type="text"
+                            label="Nombre del usuario destinatario"
+                            hint="Destinatario"
+                            lazy-rules
+                            :rules="[(val) => (val && val.length > 0) || 'Por favor ingresa datos']"
+                            />
+                          </div>
+                     </div>
+                <div class="row"  v-if="data.depositos.length>0  || dato.deposito==='SI'">  
+                <div class="col-6">
+                 <q-input 
+                  outlined
+                  dense
+                  v-model="dato.numerodocumento"
+                  type="text"
+                  label="numero de recibo"
+                  hint="Numero o Codigo de Recibo"
+                  lazy-rules
+                  :rules="[(val) => (val  && val.length > 0) || 'Por favor ingresa datos']"
+                />
+                </div>
+                </div>
+                  <div class="row"  >  
+                <div class="col-12">
+                 <q-input 
+                  outlined
+                  dense
+                  v-model="dato.observacion"
+                  type="text"
+                  label="Observacion"
+                  hint="Observacion"
+                />
+                </div>
+                </div>
+            <div>
+              <q-btn label="Crear" type="submit" color="positive" icon="add_circle" />
+              <q-btn label="Cancelar" icon="delete" color="negative" v-close-popup />
+            </div>
+          </q-form>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
+
+     <!--  editar deposito -->
+    <q-dialog v-model="dialog_mod_deposito">
+      <q-card style="max-width: 80%; width: 50%">
+        <q-card-section class="bg-green-14 text-white">
+          <div class="text-h6"><q-icon name="add_circle" />Edit Deposito</div>
+        </q-card-section>
+        <q-card-section class="q-pt-xs">
+          <q-form @submit="onModDeposito" class="q-gutter-md">
+                <div v-if="data.depositos.length===0">
+                <q-toggle v-model="dato.deposito" label="Aprobar con un deposito ?" class="q-mb-md" true-value="SI" false-value="NO" />
+                </div>
+             
+              <div class="row" v-if="data.depositos.length>0  || dato2.deposito==='SI'">
+                <div class="col-6">
+                  <q-input  
+                  outlined
+                  dense
+                  v-model="dato2.monto"
+                  type="number"
+                   step="1"
+                  label="monto a depositar"
+                  hint="Monto a Depositar"
+                  lazy-rules
+                  :rules="[(val) => (val  > 0) || 'Por favor ingresa datos']"
+                  />  
+                </div>
+                <div class="col-6">
+                        <q-select
+                        outlined
+                        dense
+                        v-model="dato2.moneda"
+                        :options="monedas"
+                        type="text"
+                        label="moneda"
+                        hint="tipo de moneda "
+                        lazy-rules
+                        :rules="[(val) => (val && val.length > 0) || 'Por favor ingresa datos']"
+                        /> 
+                </div>
+             </div>
+                <div class="row" v-if="data.depositos.length>0  || dato2.deposito==='SI'">    
+                          <div class="col-6">
+                            <q-select
+                            outlined
+                            dense
+                            v-model="dato2.origen"
+                            :options="autorizadores"
+                            type="text"
+                            label="Nombre del usuario que deposita"
+                            hint="Origen"
+                            lazy-rules
+                            :rules="[(val) => (val && val.length > 0) || 'Por favor ingresa datos']"
+                            />
+                          </div>
+                            <div class="col-6">
+                            <q-select
+                            outlined
+                            dense
+                            v-model="dato2.destino"
+                            :options="autorizadores"
+                            type="text"
+                            label="Nombre del usuario destinatario"
+                            hint="Destinatario"
+                            lazy-rules
+                            :rules="[(val) => (val && val.length > 0) || 'Por favor ingresa datos']"
+                            />
+                          </div>
+                     </div>
+                <div class="row"  v-if="data.depositos.length>0  || dato2.deposito==='SI'">  
+                <div class="col-6">
+                 <q-input 
+                  outlined
+                  dense
+                  v-model="dato2.numerodocumento"
+                  type="text"
+                  label="numero de recibo"
+                  hint="Numero o Codigo de Recibo"
+                  lazy-rules
+                  :rules="[(val) => (val  && val.length > 0) || 'Por favor ingresa datos']"
+                />
+                </div>
+                </div>
+                  <div class="row"  >  
+                <div class="col-12">
+                 <q-input 
+                  outlined
+                  dense
+                  v-model="dato2.observacion"
+                  type="text"
+                  label="Observacion"
+                  hint="Observacion"
+                />
+                </div>
+                </div>
+            <div>
+              <q-btn label="Crear" type="submit" color="positive" icon="add_circle" />
+              <q-btn label="Cancelar" icon="delete" color="negative" v-close-popup />
+            </div>
+          </q-form>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
+
   </div>
 </template>
 <script>
@@ -474,6 +744,10 @@ export default {
     total:0,
     dialog_add_detalle:false,
     dialog_mod_detalle:false,
+    dialog_add_deposito:false,
+    dialog_mod_deposito:false,
+    autorizadores:[],
+    monedas:["Bolivianos","Dolares"],
     filter:'',
     slide: 1,
     fullscreen:false,
@@ -485,6 +759,17 @@ export default {
     {name: "detalle",label: "Detalle",align: "left",field: "detalle",sortable: false,},
     {name: "precio",label: "Precio Unitario",align: "left",field: "precio",sortable: false,},
     {name: "subtotal",label: "Costo [Bs]",align: "center",field: "subTotal",sortable: false,},
+    {name: "opcion",label: "opcion",align: "left",field: "opcion",sortable: false,},
+    ],
+     subcol2: [
+    {name: "deposito",required: true, label: "Deposito",align: "left",field: "deposito",sortable: false},
+    {name: "monto",label: "Monto Deposito",align: "left",field: "monto",sortable: false,},
+    {name: "codigo",label: "Codigo de Deposito",align: "left",field: "codigo",sortable: false,},
+    {name: "origen",label: "Origen",align: "left",field: "origen",sortable: false,},
+    {name: "destino",label: "Destino",align: "left",field: "destino",sortable: false,},
+    {name: "fecha",label: "Fecha",align: "left",field: "fecha",sortable: false,},
+    {name: "foto",label: "Foto/Imagen",align: "center",field: "foto",sortable: false},
+    {name: "observacion",label: "Observacion",align: "center",field: "observacion",sortable: false},
     {name: "opcion",label: "opcion",align: "left",field: "opcion",sortable: false,},
     ],
     group: "op1",
@@ -506,6 +791,7 @@ export default {
     //this.cargarEmpresas();
     //this.cargarSociedades();
     //this.misdatos();
+     this.misautorizados();
   },
   methods: {
      misdatos() {
@@ -530,12 +816,33 @@ export default {
           this.$q.loading.hide();
         });
     },
+    misautorizados(){
+        this.autorizadores=[]
+      this.$api.get('usersadmin').then(res=>{
+      //  console.log(res.data);
+             res.data.forEach((it)=>{
+              this.autorizadores.push(it.name)
+            })
+    }).catch(err=>{
+        this.$q.notify({
+          message:err.response.data.message,
+          icon:'close',
+          color:'red'
+        })
+     })
+     },
     click_add(){
          this.dato.preciorecibo=0.3
          this.dato.cantidadrecibo=1
          this.dato.detallerecibo=""
          this.dato.unidad="Pza"
          this.dialog_add_detalle=true
+        },
+        click_add_deposito(){
+          this.dato={}
+         this.dato.moneda=this.monedas[0]
+         this.dialog_add_deposito=true
+
         },
     onAddDetalle(){
         this.dato.subtotalrecibo= Number.parseFloat(this.dato.cantidadrecibo*this.dato.preciorecibo).toFixed(2)
@@ -553,7 +860,6 @@ export default {
         this.misdatos();
        this.$q.loading.hide()
       }).catch(err=>{
-        console.log(err.response.data);
         this.$q.notify({
           message:err.response.data.message,
           icon:'close',
@@ -581,7 +887,6 @@ export default {
           this.misdatos();
           this.$q.loading.hide()
         }).catch(err=>{
-        console.log(err.response.data);
         this.$q.notify({
           message:err.response.data.message,
           icon:'close',
@@ -615,7 +920,41 @@ export default {
                           this.$q.loading.hide()
                           this.misdatos()
                   }).catch(err=>{
-                      console.log(err.response.data);
+                      this.$q.notify({
+                        message:err.response.data.message,
+                        icon:'close',
+                        color:'red'
+                      })
+                  this.$q.loading.hide()
+                })
+                }).onCancel(() => {
+                    this.$q.loading.hide()
+                })
+     },
+     deleteDeposito(props){
+      this.dato2=props.row
+        this.$q.dialog({
+                  title: 'Eliminar Deposito',
+                  message: '¿Esta seguro de eliminar el Deposito?',
+                  ok: {
+                  push: true,
+                   color: 'positive'
+                  },
+                    cancel: {
+                  push: true,
+                    color: 'negative'
+                   }
+                }).onOk(() => {
+                 this.$q.loading.show()
+                this.$api.delete("deposito/" + this.dato2.id ).then((res) => {
+                            this.$q.notify({
+                              textColor: "positive",
+                              icon: "done",
+                              message: "Deposito Eliminado",
+                            });
+                          this.$q.loading.hide()
+                          this.misdatos()
+                  }).catch(err=>{
                       this.$q.notify({
                         message:err.response.data.message,
                         icon:'close',
@@ -653,7 +992,6 @@ export default {
                     this.misdatos();
                     this.$q.loading.hide()
                     }).catch(err=>{
-                    console.log(err.response.data);
                     this.$q.notify({
                     message:err.response.data.message,
                     icon:'close',
@@ -706,7 +1044,60 @@ export default {
           break;
       }
       return ans+'.'+cadena[1]
-    }
+    },
+    onAddDeposito(){
+          this.$q.loading.show()
+           if(this.data.depositos.length>0)
+           {
+              this.dato.deposito="SI"
+           }
+      this.dato.pedido_id=this.data.id
+      this.$api.post( "deposito", this.dato).then((res) => {
+        this.$q.notify({
+          color: "green-4",
+          textColor: "white",
+          icon: "cloud_done",
+          message: "Creado correctamente",
+        });
+        this.dialog_add_deposito = false;
+        this.misdatos();
+       this.$q.loading.hide()
+      }).catch(err=>{
+        this.$q.notify({
+          message:err.response.data.message,
+          icon:'close',
+          color:'red'
+        })
+          this.dialog_add_deposito = false;
+        this.$q.loading.hide()
+      })
+    }, editDeposito(item){
+        this.dato2=item.row
+        this.dialog_mod_deposito=true
+    },
+     onModDeposito(){
+          this.$q.loading.show()
+      this.$api.post( "deposito", this.dato2).then((res) => {
+        this.$q.notify({
+          color: "green-4",
+          textColor: "white",
+          icon: "cloud_done",
+          message: "Modificado correctamente",
+        });
+        this.dialog_mod_deposito = false;
+        this.misdatos();
+       this.$q.loading.hide()
+      }).catch(err=>{
+        this.$q.notify({
+          message:err.response.data.message,
+          icon:'close',
+          color:'red'
+        })
+          this.dialog_mod_deposito = false;
+        this.$q.loading.hide()
+      })
+    },
+
 
       
   }

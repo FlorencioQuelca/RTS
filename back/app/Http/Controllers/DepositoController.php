@@ -31,8 +31,21 @@ class DepositoController extends Controller
      */
     public function store(StoreDepositoRequest $request)
     {
-        Deposito::create($request->all());
+        $deposito=new Deposito();
+        $deposito->fecha=date('Y-m-d');
+        $deposito->hora=date('H:i:s');
+        $deposito->pedido_id=$request->pedido_id;
+        $deposito->deposito=$request->deposito;
+        $deposito->monto=$request->monto;
+        $deposito->moneda=$request->moneda;
+        $deposito->origen=$request->origen;
+        $deposito->destino=$request->destino;
+        $deposito->numerodocumento=$request->numerodocumento;
+        $deposito->observacion=$request->observacion;
+        $deposito->estado="ACTIVO";
+        $deposito->save();
         return \response()->json(['res'=> true, 'message'=>'insertado correctamente'],200);
+       
     }
 
     /**
