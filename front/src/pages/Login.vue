@@ -129,13 +129,18 @@ export default {
         this.store.user=res.data.user
         this.store.isLoggedIn=true
         res.data.user.permisos.forEach(r => {
-           // if(r.id==1) this.store.booluser=true
+           if(r.id==1) this.store.usuarios=true
+           if(r.id==2) this.store.pedidos=true
+           if(r.id==3) this.store.depositos=true
+           if(r.id==4) this.store.fotos=true
+           if(r.id==5) this.store.proyectos=true
+           if(r.id==6) this.store.departamentos=true
          
         });
         this.$api.defaults.headers.common['Authorization'] = 'Bearer '+res.data.token
         localStorage.setItem('tokenRTS',res.data.token)
       }).catch(error => {
-        console.log(error)
+       // console.log(error)
         this.$q.notify({
           message: error.response.data.message,
           color: 'negative',

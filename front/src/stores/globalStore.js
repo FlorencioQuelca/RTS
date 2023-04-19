@@ -7,6 +7,12 @@ export const globalStore = defineStore('global', {
     user: {},
     roles: [],
     isLoggedIn: !!localStorage.getItem('tokenRTS'),
+    usuarios:false,
+    pedidos:false,
+    depositos:false,
+    fotos:false,
+    proyectos:false,
+    departamentos:false,
   
   }),
   getters: {

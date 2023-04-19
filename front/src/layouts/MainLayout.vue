@@ -46,42 +46,18 @@
         class="text-grey-8">   Opciones del menu </q-item-label>
     
         <q-expansion-item dense exact expand-separator icon="o_home" label="Principal" default-opened to="/" expand-icon="null"/>
-        <q-expansion-item dense exact expand-separator icon="o_people" label="Usuarios" to="/User" expand-icon="null" active-class="my-menu-link" />
-        <q-expansion-item dense exact expand-separator icon="format_list_bulleted" label="Pedidos" to="/Pedidos" expand-icon="null"  active-class="my-menu-link" />
-        <q-expansion-item dense exact expand-separator icon="o_price_change" label="Depositos" to="/Deposito" expand-icon="null" active-class="my-menu-link"  />
-        <q-expansion-item dense exact expand-separator icon="receipt_long" label="Facturas/Recibos" to="/Factura" expand-icon="null" active-class="my-menu-link" />
-        <q-expansion-item dense exact expand-separator icon="o_home_work" label="Proyectos" to="Proyectos" expand-icon="null" active-class="my-menu-link" />
+        <q-expansion-item dense exact expand-separator icon="login" label="login" default-opened to="/login" expand-icon="null" active-class="my-menu-link" v-if="store.login"/>
+        <q-expansion-item dense exact expand-separator icon="o_people" label="Usuarios" to="/User" expand-icon="null" active-class="my-menu-link"  v-if="store.usuarios"/>
+        <q-expansion-item dense exact expand-separator icon="format_list_bulleted" label="Pedidos" to="/Pedidos" expand-icon="null"  active-class="my-menu-link" v-if="store.pedidos"/>
+        <q-expansion-item dense exact expand-separator icon="o_price_change" label="Depositos" to="/Deposito" expand-icon="null" active-class="my-menu-link"  v-if="store.depositos" />
+        <q-expansion-item dense exact expand-separator icon="receipt_long" label="Facturas/Recibos" to="/Factura" expand-icon="null" active-class="my-menu-link" v-if="store.facturas" />
+        <q-expansion-item dense exact expand-separator icon="o_home_work" label="Proyectos" to="Proyectos" expand-icon="null" active-class="my-menu-link" v-if="store.proyectos" />
+        <q-expansion-item dense exact expand-separator icon="summarize" label="Departamentos" to="Departamentos" expand-icon="null" active-class="my-menu-link" v-if="store.departamentos" />
         
-              <q-item clickable active-class="my-menu-link" to="/" exact>
-                    <q-item-section avatar>
-                    <q-icon color="teal" name="home" />
-                    </q-item-section>
-                    <q-item-section>Principal</q-item-section>
-              </q-item>
-        
-          <q-item 
-               clickable v-ripple to="/login" exact>
-              <q-item-section avatar>
-              <q-icon color="teal" name="login" />
-              </q-item-section>
-              <q-item-section>Ingreso</q-item-section>
-        </q-item>
+            
 
-          <q-item  
-           clickable   active-class="my-menu-link" to="/User" exact>
-          <q-item-section avatar>
-            <q-icon color="teal" name="today" />
-          </q-item-section>
-          <q-item-section>Usuarios</q-item-section>
-        </q-item>
 
-         <q-item    
-         clickable   active-class="my-menu-link" to="/" exact>
-          <q-item-section avatar>
-            <q-icon color="teal" name="summarize" />
-          </q-item-section>
-          <q-item-section>Reportes</q-item-section>
-        </q-item>
+       
 
         <q-item 
          clickable  @click="logout">
@@ -129,6 +105,13 @@ import {globalStore} from "stores/globalStore";
           this.$router.push('/login')
           this.$q.loading.hide()
           globalStore().isLoggedIn=false
+
+            globalStore().usuarios=false
+            globalStore().pedidos=false
+            globalStore().depositos=false
+            globalStore().fotos=false
+            globalStore().proyectos=false
+            globalStore().departamentos=false
         })
       }).onCancel(() => {
       })

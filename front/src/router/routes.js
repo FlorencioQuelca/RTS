@@ -4,6 +4,7 @@ const Login = import('../pages/Login.vue')
 const Pedido = import('../pages/Pedido.vue')
 const Proyecto = import('../pages/Proyecto.vue')
 const DetallePedidos = import('../pages/Detalle.vue')
+const Departamentos = import('../pages/Departamento.vue')
 const routes = [
   {
     path: '/',
@@ -14,10 +15,9 @@ const routes = [
       { path: '/User', component: User,meta: { requiresAuth: true }},
       { path: '/Pedidos', component: Pedido,meta: { requiresAuth: true }},
       { path: '/Proyectos', component: Proyecto,meta: { requiresAuth: true }},
+      { path: '/Departamentos', component:Departamentos,meta: { requiresAuth: true }},
       { path: '/DetallePedidos/:id/view',  name: 'DetallePedidos.view',component: DetallePedidos,meta: { requiresAuth: true}},
     //  { path: 'Deposito', component: Deposito,meta: { requiresAuth: true }},
-   
-  
     ]
   },
   {
