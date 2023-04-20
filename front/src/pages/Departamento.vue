@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-md">
     <q-btn
-      label="Nuevo Proyecto"
+      label="Nuevo Departamentos"
       color="positive"
       @click="nuevo_form"
       icon="add_circle"
@@ -9,7 +9,7 @@
     />
     
 <!-- TABLA PRINCIPAL -->
-    <q-table :filter="filter" title="PROYECTOS DE RTS"
+    <q-table :filter="filter" title="DEPARTAMENTOS DE RTS"
       :rows="data"
       :columns="columns"
       row-key="name"
@@ -62,11 +62,11 @@
       </template>
     </q-table>
 
-    <!--  nuevo proyecto -->
+    <!--  nuevo departamento -->
     <q-dialog v-model="dialog_add">
       <q-card style="max-width: 80%; width: 50%">
         <q-card-section class="bg-green-14 text-white">
-          <div class="text-h6"><q-icon name="add_circle" /> Nuevo Proyecto</div>
+          <div class="text-h6"><q-icon name="add_circle" /> Nuevo Departamento</div>
         </q-card-section>
         <q-card-section class="q-pt-xs">
           <q-form @submit="onSubmit" class="q-gutter-md">
@@ -77,7 +77,7 @@
                   v-model="dato.codigo"
                   type="text"
                   label="Codigo"
-                  hint="Ingresar Codigo del Proyecto"
+                  hint="Ingresar Codigo del Departamento"
                   lazy-rules
                   :rules="[(val) => (val && val.length > 0) || 'Por favor ingresa datos']"
                 />
@@ -85,8 +85,8 @@
                   filled
                   v-model="dato.nombre"
                   type="text"
-                  label="Nombre del Proyecto"
-                  hint="Nombre del Proyecto"
+                  label="Nombre del Departamento"
+                  hint="Nombre del Departamento"
                   lazy-rules
                   :rules="[(val) => (val && val.length > 0) || 'Por favor ingresa datos']"
                 />
@@ -94,8 +94,8 @@
                   filled
                   v-model="dato.lugar"
                   type="text"
-                  label="Lugar del Proyecto"
-                  hint="Lugar del Proyecto"
+                  label="Lugar del Departamento"
+                  hint="Lugar del Departamento"
                   lazy-rules
                   :rules="[(val) => (val && val.length > 0) || 'Por favor ingresa datos']"
                 />
@@ -113,11 +113,11 @@
     </q-dialog>
 
 
- <!--  editar proyecto-->
+ <!--  editar Departamento-->
     <q-dialog v-model="dialog_mod">
       <q-card style="max-width: 80%; width: 50%">
         <q-card-section class="bg-green-14 text-white">
-          <div class="text-h6"><q-icon name="edit" /> Modificar proyecto</div>
+          <div class="text-h6"><q-icon name="edit" /> Modificar Departamento</div>
         </q-card-section>
         <q-card-section class="q-pt-xs">
           <q-form @submit="onMod" class="q-gutter-md">
@@ -128,7 +128,7 @@
                   v-model="dato2.codigo"
                   type="text"
                   label="Codigo"
-                  hint="Ingresar Codigo del Proyecto"
+                  hint="Ingresar Codigo del Departamento"
                   lazy-rules
                   :rules="[(val) => (val && val.length > 0) || 'Por favor ingresa datos']"
                 />
@@ -136,8 +136,8 @@
                   filled
                   v-model="dato2.nombre"
                   type="text"
-                  label="Nombre del Proyecto"
-                  hint="Nombre del Proyecto"
+                  label="Nombre del Departamento"
+                  hint="Nombre del Departamento"
                   lazy-rules
                   :rules="[(val) => (val && val.length > 0) || 'Por favor ingresa datos']"
                 />
@@ -145,8 +145,8 @@
                   filled
                   v-model="dato2.lugar"
                   type="text"
-                  label="Lugar del Proyecto"
-                  hint="Lugar del Proyecto"
+                  label="Lugar del Departamento"
+                  hint="Lugar del Departamento"
                   lazy-rules
                   :rules="[(val) => (val && val.length > 0) || 'Por favor ingresa datos']"
                 />
@@ -209,7 +209,7 @@ export default {
   methods: {
      misdatos(){
         this.$q.loading.show();
-      this.$api.get('proyectos').then(res=>{
+      this.$api.get('departamentos').then(res=>{
         //console.log(res.data)
        this.data=res.data
          this.$q.loading.hide()
@@ -234,7 +234,7 @@ export default {
     onSubmit(){
        this.$q.loading.show();
        this.dato.estado="ACTIVO"
-      this.$api.post( "proyectos", this.dato).then((res) => {
+      this.$api.post( "departamentos", this.dato).then((res) => {
         this.$q.notify({
           color: "green-4",
           textColor: "white",
@@ -257,8 +257,8 @@ export default {
     deleteRow(props){
       this.dato2=props.row
         this.$q.dialog({
-                  title: 'Eliminar Proyecto',
-                  message: '¿Esta seguro de eliminar la proyecto?',
+                  title: 'Eliminar Departamento',
+                  message: '¿Esta seguro de eliminar la departamento?',
                   ok: {
                   push: true,
                    color: 'positive'
@@ -270,11 +270,11 @@ export default {
                  
                 }).onOk(() => {
                  this.$q.loading.show()
-                this.$api.delete("proyectos/" + this.dato2.id ).then((res) => {
+                this.$api.delete("departamentos/" + this.dato2.id ).then((res) => {
                             this.$q.notify({
                               textColor: "positive",
                               icon: "done",
-                              message: "Proyecto Eliminado",
+                              message: "Departamento Eliminado",
                             });
                           this.$q.loading.hide()
                           this.misdatos()
@@ -299,7 +299,7 @@ export default {
       onMod() {
       this.$q.loading.show();
     
-      this.$api.put("proyectos/" + this.dato2.id, this.dato2).then((res) => {
+      this.$api.put("departamentos/" + this.dato2.id, this.dato2).then((res) => {
           this.$q.notify({
             color: "green-4",
             textColor: "white",

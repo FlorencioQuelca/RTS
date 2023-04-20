@@ -30,7 +30,8 @@ class DepartamentoController extends Controller
      */
     public function store(StoreDepartamentoRequest $request)
     {
-        //
+        Departamento::create($request->all());
+        return \response()->json(['res'=> true, 'message'=>'insertado correctamente'],200);
     }
 
     /**
@@ -38,7 +39,7 @@ class DepartamentoController extends Controller
      */
     public function show(Departamento $departamento)
     {
-        //
+        return \response()->json($departamento,200);
     }
 
     /**
@@ -54,7 +55,8 @@ class DepartamentoController extends Controller
      */
     public function update(UpdateDepartamentoRequest $request, Departamento $departamento)
     {
-        //
+        $departamento->update($request->all());
+        return \response()->json(['res'=> true, 'message'=>'modificado  correctamente'],200);
     }
 
     /**
@@ -62,6 +64,13 @@ class DepartamentoController extends Controller
      */
     public function destroy(Departamento $departamento)
     {
-        //
+        try{
+            $departamento->delete();
+          //  ProyectoPersona::destroy($id);
+            return \response()->json(['res'=> true, 'message'=>'Eliminado Correctamente'],200);
+        }
+        catch(\Exception $e){
+            return \response()->json(['res'=> false, 'message'=>$e->getMessage()],200);
+        }
     }
 }
