@@ -46,7 +46,7 @@
         class="text-grey-8">   Opciones del menu </q-item-label>
     
         <q-expansion-item dense exact expand-separator icon="o_home" label="Principal" default-opened to="/" expand-icon="null"/>
-        <q-expansion-item dense exact expand-separator icon="login" label="login" default-opened to="/login" expand-icon="null" active-class="my-menu-link" v-if="store.login"/>
+        <q-expansion-item dense exact expand-separator icon="login" label="Login" default-opened to="/Login" expand-icon="null" active-class="my-menu-link" />
         <q-expansion-item dense exact expand-separator icon="o_people" label="Usuarios" to="/User" expand-icon="null" active-class="my-menu-link"  v-if="store.usuarios"/>
         <q-expansion-item dense exact expand-separator icon="format_list_bulleted" label="Pedidos" to="/Pedidos" expand-icon="null"  active-class="my-menu-link" v-if="store.pedidos"/>
         <q-expansion-item dense exact expand-separator icon="o_price_change" label="Depositos" to="/Deposito" expand-icon="null" active-class="my-menu-link"  v-if="store.depositos" />

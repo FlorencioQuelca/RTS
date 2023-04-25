@@ -12,6 +12,7 @@ const routes = [
     children: [
     { path: '', component: () => import('pages/IndexPage.vue') },
    
+      { path: '/Login', component: Login,meta: { requiresAuth: false }},
       { path: '/User', component: User,meta: { requiresAuth: true }},
       { path: '/Pedidos', component: Pedido,meta: { requiresAuth: true }},
       { path: '/Proyectos', component: Proyecto,meta: { requiresAuth: true }},
@@ -20,10 +21,7 @@ const routes = [
     //  { path: 'Deposito', component: Deposito,meta: { requiresAuth: true }},
     ]
   },
-  {
-    path: '/login',
-    component: Login,
-  },
+  
   // Always leave this as last one,
   // but you can also remove it
   {
