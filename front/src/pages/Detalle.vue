@@ -62,45 +62,26 @@
       </q-card-section>
 
  <q-expansion-item
-        
         expand-separator
         icon="receipt"
         label="DETALLE DEL PEDIDO"
         header-class="text-white"
          default-opened
       >
-      <q-card>
-        
         <q-btn v-if="this.data.etapa==='NUEVO'"
                 icon="send"
                  label="ENVIAR PEDIDO PARA APROBACION"
                 @click="click_send"
                 color="red-14"
-               
         />
-
-<!--   lista-->
-    
-        <q-card-section class="bg-green-14 text-white" style="padding: 2px 2px 2px 25px">
-         <div class="row"  style="
-              display: flex;
-              flex-direction: row;
-              justify-content: space-between;
-            " >
-           <q-btn  v-if="this.data.etapa==='NUEVO'"
+          <q-btn  v-if="this.data.etapa==='NUEVO'"
                 icon="add_circle"
                  label="Nuevo"
                 @click="click_add"
                 color="blue"
-              
               />
-          <div class="text-h6" dense>DETALLE DEL PEDIDO</div>
-             
-             <div/>
-             {{total}}
-              </div>
-             
-        </q-card-section>
+<!--   lista-->
+      <q-card>
         <q-card-section class="q-pt-xs">
           <q-table
             :rows="data.detalles"
@@ -155,7 +136,7 @@
        </q-card>
       </q-expansion-item>
 
-        <q-expansion-item
+      <q-expansion-item
         expand-separator
         icon="send"
         label="DEPOSITOS REALIZADOS"
@@ -212,6 +193,14 @@
                         color="yellow"
                         @click="editDeposito(props)"
                         icon="edit"
+                    />
+                     <q-btn 
+                        dense
+                        round
+                        flat
+                        color="green"
+                        @click="UploadBoucher(props)"
+                        icon="upload"
                     />
                         <q-btn  
                         dense
@@ -692,6 +681,29 @@
       </q-card>
     </q-dialog>
 
+
+    
+ 
+ <!--  cargar boucher deposito -->
+    <q-dialog v-model="dialog_upload_deposito">
+      <q-card style="max-width: 50%; width: 50%">
+        <q-card-section class="bg-green-14 text-white">
+          <div class="text-h6"><q-icon name="add_circle" />Cargar Deposito</div>
+        </q-card-section>
+        <q-card-section class="q-pt-xs">
+      
+    <q-uploader
+                        class="full-width"
+                        label="Subir boucher deposito  (Max 4mb)"
+                         accept=".jpg,png,jpeg,image/*"
+                        :factory="uploadFile1"
+                      />
+
+        </q-card-section>
+      </q-card>
+    </q-dialog>
+
+
   </div>
 </template>
 <script>
@@ -746,6 +758,7 @@ export default {
     dialog_mod_detalle:false,
     dialog_add_deposito:false,
     dialog_mod_deposito:false,
+    dialog_upload_deposito:false,
     autorizadores:[],
     monedas:["Bolivianos","Dolares"],
     filter:'',
@@ -1076,8 +1089,8 @@ export default {
         this.dialog_mod_deposito=true
     },
      onModDeposito(){
-          this.$q.loading.show()
-      this.$api.post( "deposito", this.dato2).then((res) => {
+        this.$q.loading.show()
+        this.$api.put( "deposito/"+this.dato2.id, this.dato2).then((res) => {
         this.$q.notify({
           color: "green-4",
           textColor: "white",
@@ -1097,6 +1110,32 @@ export default {
         this.$q.loading.hide()
       })
     },
+    UploadBoucher(item){
+        this.dato2=item.row
+        this.dialog_upload_deposito=true
+    },
+    uploadFile1(files){
+        this.$q.loading.show()
+      const fileData= new FormData()
+      fileData.append('archivo',files[0])
+      fileData.append('contrato_id',this.dato2.id)
+      fileData.append('nombre',this.dato2.nombre)
+      this.$api.post('/upload',fileData)
+      .then(res=>{
+        console.log(res.data)
+          this.dialog_add = false;
+        this.misdatos()
+      }).catch(err=>{
+        this.$q.notify({
+          message:err.response.data.message,
+          icon:'close',
+          color:'red'
+        })
+          this.dialog_mod_deposito = false;
+        this.$q.loading.hide()
+      })
+
+    }
 
 
       

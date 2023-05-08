@@ -26,15 +26,11 @@
       </template>
       <template v-slot:body="props">
         <q-tr :props="props">
-          <q-td key="codigo" :props="props">
-            {{props.row.codigo}}
-          </q-td>
+        
            <q-td key="nombre" :props="props">
             {{props.row.nombre}}
           </q-td>
-           <q-td key="lugar" :props="props">
-            {{props.row.lugar}}
-          </q-td>
+          
           <q-td key="estado" :props="props">
             {{props.row.estado}}
           </q-td>
@@ -72,17 +68,10 @@
           <q-form @submit="onSubmit" class="q-gutter-md">
             <div class="row">
               <div class="col-12">
+             
                 <q-input
                   filled
-                  v-model="dato.codigo"
-                  type="text"
-                  label="Codigo"
-                  hint="Ingresar Codigo del Departamento"
-                  lazy-rules
-                  :rules="[(val) => (val && val.length > 0) || 'Por favor ingresa datos']"
-                />
-                <q-input
-                  filled
+                  dense
                   v-model="dato.nombre"
                   type="text"
                   label="Nombre del Departamento"
@@ -90,9 +79,12 @@
                   lazy-rules
                   :rules="[(val) => (val && val.length > 0) || 'Por favor ingresa datos']"
                 />
-                <q-input
+                <q-select
                   filled
-                  v-model="dato.lugar"
+                  dense
+                  v-model="dato.estado"
+                   :options="options"
+                  options-dense
                   type="text"
                   label="Lugar del Departamento"
                   hint="Lugar del Departamento"
@@ -123,42 +115,30 @@
           <q-form @submit="onMod" class="q-gutter-md">
             <div class="row">
               <div class="col-12">
-                <q-input
-                  filled
-                  v-model="dato2.codigo"
-                  type="text"
-                  label="Codigo"
-                  hint="Ingresar Codigo del Departamento"
-                  lazy-rules
-                  :rules="[(val) => (val && val.length > 0) || 'Por favor ingresa datos']"
-                />
+               
                 <q-input
                   filled
                   v-model="dato2.nombre"
+                  dense
                   type="text"
                   label="Nombre del Departamento"
                   hint="Nombre del Departamento"
                   lazy-rules
                   :rules="[(val) => (val && val.length > 0) || 'Por favor ingresa datos']"
                 />
-                <q-input
+                <q-select
                   filled
-                  v-model="dato2.lugar"
+                  dense
+                  v-model="dato2.estado"
+                  :options="options"
+                  options-dense 
                   type="text"
                   label="Lugar del Departamento"
                   hint="Lugar del Departamento"
                   lazy-rules
                   :rules="[(val) => (val && val.length > 0) || 'Por favor ingresa datos']"
                 />
-                 <q-select
-                  Outlined
-                  v-model="dato2.estado"
-                  :options="options"
-                  label="Estado"
-                  hint="Estado"
-                  lazy-rules
-                  :rules="[(val) => (val && val.length > 0) || 'Por favor ingresa datos']"
-                />
+                 
               </div>
              
             </div>
@@ -182,9 +162,9 @@ export default {
   data() {
     return {
       columns: [
-        {name: "codigo", align: "left", label: "Codigo", field: "codigo", sortable: true,},
+       // {name: "codigo", align: "left", label: "Codigo", field: "codigo", sortable: true,},
         {name: "nombre", align: "left", label: "nombre", field: "nombre", sortable: true,},
-        {name: "lugar", align: "left", label: "Lugar", field: "lugar", sortable: true,},
+       // {name: "lugar", align: "left", label: "Lugar", field: "lugar", sortable: true,},
         {name: "estado", align: "center", label: "estado", field: "estado", sortable: true,},
         {name: "opcion", align: "right", label: "opcion", field: "opcion", sortable: false},
       ],
@@ -223,8 +203,6 @@ export default {
         this.$q.loading.hide()
       })
      },
-        
-     
    nuevo_form(){
      this.dialog_add=true
       this.dato.codigo=""

@@ -14,16 +14,16 @@ class DepartamentoSeeder extends Seeder
     public function run(): void
     {
         DB::table('departamentos')->insert([
-            ["id"=>1,"nombre"=>"CHUQUISACA"],
-            ["id"=>2,"nombre"=>"LA PAZ"],
-            ["id"=>3,"nombre"=>"COCHABAMBA"],
-            ["id"=>4,"nombre"=>"ORURO"],
-            ["id"=>5,"nombre"=>"POTOSI"],
-            ["id"=>6,"nombre"=>"TARIJA"],
-            ["id"=>7,"nombre"=>"SANTA CRUZ"],
-            ["id"=>8,"nombre"=>"BENI"],
-            ["id"=>9,"nombre"=>"PANDO"],
-            ["id"=>10,"nombre"=>"CENTRAL"],
+            ["id"=>1,"nombre"=>"CHUQUISACA","estado"=>"ACTIVO"],
+            ["id"=>2,"nombre"=>"LA PAZ","estado"=>"ACTIVO"],
+            ["id"=>3,"nombre"=>"COCHABAMBA","estado"=>"ACTIVO"],
+            ["id"=>4,"nombre"=>"ORURO","estado"=>"ACTIVO"],
+            ["id"=>5,"nombre"=>"POTOSI","estado"=>"ACTIVO"],
+            ["id"=>6,"nombre"=>"TARIJA","estado"=>"ACTIVO"],
+            ["id"=>7,"nombre"=>"SANTA CRUZ","estado"=>"ACTIVO"],
+            ["id"=>8,"nombre"=>"BENI","estado"=>"ACTIVO"],
+            ["id"=>9,"nombre"=>"PANDO","estado"=>"ACTIVO"],
+            ["id"=>10,"nombre"=>"CENTRAL","estado"=>"ACTIVO"],
            
             
             ]);

@@ -40,8 +40,6 @@
           <q-img src="RTS.png" width="150px" />
         </q-item-label>
 
-
-
         <q-item-label header
         class="text-grey-8">   Opciones del menu </q-item-label>
     
@@ -53,11 +51,6 @@
         <q-expansion-item dense exact expand-separator icon="receipt_long" label="Facturas/Recibos" to="/Factura" expand-icon="null" active-class="my-menu-link" v-if="store.facturas" />
         <q-expansion-item dense exact expand-separator icon="o_home_work" label="Proyectos" to="Proyectos" expand-icon="null" active-class="my-menu-link" v-if="store.proyectos" />
         <q-expansion-item dense exact expand-separator icon="summarize" label="Departamentos" to="Departamentos" expand-icon="null" active-class="my-menu-link" v-if="store.departamentos" />
-        
-            
-
-
-       
 
         <q-item 
          clickable  @click="logout">
