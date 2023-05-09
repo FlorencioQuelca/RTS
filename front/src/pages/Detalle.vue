@@ -1,12 +1,24 @@
 <template>
   <div class="q-pa-md">
-  <q-btn
+
+   <div style="display:flex; justify-content:space-between">
+
+    <q-btn
       label="Atras"
       color="secondary"
       icon="arrow_back"
       @click="this.$router.push('/Pedidos')"
       class="q-mb-xs"
     />
+    <q-btn
+      label="Imprimir DETALLE"
+      color="red"
+      icon="print"
+      class="q-mb-xs"
+      @click="imprimirDetalle"
+    />
+
+    </div>
     <q-card
       class="my-card text-white"
       style="
@@ -47,11 +59,16 @@
                 <q-td key="titulo" :props="props">
                   {{ props.row.titulo }}
                 </q-td>
-                 <q-td key="descripcion" :props="props" v-if="props.row.titulo!=='Total del Pedido [Bs] : '" >
-                  {{ props.row.descripcion }}
-                </q-td>
+                
                  <q-td key="descripcion" :props="props"  v-if="props.row.titulo==='Total del Pedido [Bs] : '" style="color:blue; font-weight:700" >
                   {{ adicionarComas(props.row.descripcion) }}
+                </q-td>
+                <q-td key="descripcion" :props="props"  v-if="props.row.titulo==='Monto Transferido [Bs] :'" style="color:red; font-weight:700" >
+                  {{ adicionarComas(props.row.descripcion) }}
+                </q-td>
+
+                 <q-td key="descripcion" :props="props" v-if="props.row.titulo!=='Total del Pedido [Bs] : ' && props.row.titulo!=='Monto Transferido [Bs] :'" >
+                  {{ props.row.descripcion }}
                 </q-td>
                 </q-tr>
                 </template>
@@ -709,9 +726,9 @@
                 />
     <q-uploader
                         class="full-width"
-                        label="Subir boucher deposito  (Max 4mb)"
+                        label="Subir factura (Max 4mb)"
                          accept=".jpg,png,jpeg,image/*"
-                        :factory="uploadFile1"
+                        :factory="uploadFile2"
                       />
 
         </q-card-section>
@@ -722,6 +739,7 @@
   </div>
 </template>
 <script>
+import {jsPDF} from "jspdf";
 import {globalStore} from "stores/globalStore";
 import { date } from 'quasar'
 const { addToDate } = date
@@ -769,6 +787,7 @@ export default {
     rows:[],
     columna,
     total:0,
+    total1:0,
     dialog_add_detalle:false,
     dialog_mod_detalle:false,
     dialog_add_deposito:false,
@@ -827,8 +846,10 @@ export default {
       this.$q.loading.show();
       this.rows=[]
       this.$api.get("pedidoid/" + this.$route.params.id).then((res) => {
-          this.data = res.data[0];
+          this.data = res.data[0]
+          console.log(this.data);
           this.total=0.0
+          this.total1=0.0
            this.rows.push({titulo:"Codigo : ", descripcion: res.data[0].codigo})
            this.rows.push({titulo:"Departamento  y Solicitante: " , descripcion: res.data[0].user.apartment+  " , "+res.data[0].user.name})
            this.rows.push({titulo:"Fecha  y Hora de Solicitud :", descripcion: reverseFecha(res.data[0].fecha)+ " Horas: "+  horalarga(res.data[0].hora)})
@@ -839,8 +860,12 @@ export default {
                 this.total+=Number(it.subtotalrecibo)
              })
            this.rows.push({titulo:"Total del Pedido [Bs] : ", descripcion:Number.parseFloat(this.total).toFixed(2) })
-           this.rows.push({titulo:"Monto Transferido [Bs] :", descripcion: res.data[0].saldo})
-           this.rows.push({titulo:"Por transferir [Bs] :", descripcion: res.data[0].saldo})
+
+            res.data[0].depositos.forEach((it)=> {
+                this.total1+=Number(it.monto)
+             })
+           this.rows.push({titulo:"Monto Transferido [Bs] :", descripcion: Number.parseFloat(this.total1).toFixed(2)})
+           this.rows.push({titulo:"Por transferir [Bs] :", descripcion: Number.parseFloat(Number.parseFloat(this.total).toFixed(2)-Number.parseFloat(this.total1).toFixed(2))})
 
           this.$q.loading.hide();
         });
@@ -1154,12 +1179,28 @@ export default {
        //   this.dialog_upload_deposito = false;
         this.$q.loading.hide()
       })
+    },
+       imprimirDetalle(){
+             let doc = new jsPDF('portrait' ,null, 'letter');
+             let logo = new Image();
+             logo.src = 'rts.png';
+             let escudo = new Image();
+             escudo.src = 'rts.png';
+            
+            // doc.addImage(logo, 'PNG', 170, 11, 25, 20);
+             doc.addImage(escudo, 'PNG', 95, 11, 20, 15);
+             doc.setFont('times')
+             doc.rect(15,10, 185,255)
+             doc.text("SOLICITANTE", 83,104)
+             doc.text('RENDICION DE CUENTAS',73,34);
 
-    }
-
-
-      
+             doc.setFontSize(8, 'bold').setFontSize(10).setFont(undefined, 'bold').setTextColor('#000000');
+             doc.text("PROYECTO: "+this.data.proyecto.nombre,43,44);
+             doc.text(this.data.justificacion,73,49)
+             window.open(doc.output('bloburl',{filename:"FICHA.pdf"}), '_blank');
+   }
   }
+  
  };
 
 </script>
