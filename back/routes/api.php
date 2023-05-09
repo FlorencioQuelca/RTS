@@ -50,7 +50,9 @@ Route::group(['middleware'=>"auth:sanctum"],function (){
     Route::apiResource('detalle',\App\Http\Controllers\DetalleController::class); 
     Route::apiResource('fotos',\App\Http\Controllers\FotoController::class); 
     Route::apiResource('deposito',\App\Http\Controllers\DepositoController::class); 
+    Route::post('upload',[\App\Http\Controllers\DepositoController::class,'upload']);
 
     //detalle
     Route::get('/pedidoid/{pedido}',[\App\Http\Controllers\PedidoController::class,'pedidoid'])->name('pedidoid'); //un solo pedido con su detalle
+
 });

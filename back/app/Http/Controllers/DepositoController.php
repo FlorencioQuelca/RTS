@@ -86,4 +86,31 @@ class DepositoController extends Controller
             return \response()->json(['res'=> false, 'message'=>$e->getMessage()],200);
         }
     }
+
+    //oficial
+    public function upload(StoreDepositoRequest $request){
+        if ($request->hasFile('archivo')){
+            $file=$request->file('archivo');
+            $size=$file->getSize();  //tamaño en bytes // hay que convertir
+            $url=time().$request->nombre.'.'.$file->getClientOriginalExtension();
+            $file->move(\public_path('depositos'),$url);
+            $deposito = Deposito::findOrFail($request->deposito_id);
+            $deposito->foto_url=$url;
+            $deposito->save();
+            return $deposito;
+        }else{
+            return "no existe el archivo";
+        }
+    }
+    public function base64(Request $request){
+        if ($request->imagen==''){
+            return '';
+        }
+        $path = 'imagenes/'.$request->imagen;
+        $type = pathinfo($path, PATHINFO_EXTENSION);
+        $data = file_get_contents($path);
+        $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+        return $base64;
+
+    }
 }
