@@ -37,7 +37,7 @@
       <q-list bordered padding class="rounded-borders text-primary">
         
          <q-item-label header class="text-center q-pa-none q-ma-none" style="background: #fffff">
-          <q-img src="RTS.png" width="150px" />
+          <q-img src="rts.png" width="150px" />
         </q-item-label>
 
         <q-item-label header
